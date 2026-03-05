@@ -1,5 +1,7 @@
 """
 © 2026 University of Glasgow
+
+Licensed under the BS
 """
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo

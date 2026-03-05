@@ -1,0 +1,1 @@
+License: BSD-3-Clause. Flask is licensed under a BSD-3-Clause license. Flask Pymongo and Leaflet are both licensed under a BSD-2-clause license, so to be consistent and in alignd to the leats permissive license, the license used here is BSD-3-Clause.
