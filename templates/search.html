@@ -1,0 +1,15 @@
+<html> 
+<body> 
+    <form action = "http://127.0.0.1:5000/results" method = "POST"> 
+        <p>Name <input type = "text" name = "Name" /></p> 
+        <p>Longitude <input type = "text" name = "Longitude" /> Latitude <input type = "text" name = "Latitude" /> Distance  <input type = "text" name = "Distance" /></p> 
+        <p>Site <select name="Site">
+            <option value="site_unselected">--Please Select--</option>
+            {% for site in sites %}
+                <option value="{{site}}">{{site}}</option>
+            {% endfor %}
+        </select></p>
+        <p><input type = "submit" value = "submit" /></p> 
+    </form> 
+</body> 
+</html> 

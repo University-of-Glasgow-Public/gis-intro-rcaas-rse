@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+<div id="map" style="width: 100vw; height: 100vh;"></div>
+<script>
+	const map = L.map('map').setView([57.3, -5], 6);
+	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+	function onEachFeature(feature, layer) {
+		var content = '<p>Details:</p>';
+		if (feature.properties && feature.properties.name) {
+			content += '<p>name: ' + feature.properties.name + '</p>';
+		}
+		layer.bindPopup(content);
+	}
+	var longitude = {{ longitude }};
+	var latitude = {{ latitude }};
+	var distance = {{ distance }};
+	const circle = L.circle([latitude,longitude], {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.5,
+		radius: distance
+	}).addTo(map);
+	var sites = {{ sites|tojson }};
+	const siteLayer = L.geoJSON(sites, {
+		onEachFeature,
+		pointToLayer(feature, latlng) {}
+	}).addTo(map);
+	var geojson = {{ data|tojson }};
+    const bothyLayer = L.geoJSON(geojson, {
+		onEachFeature,
+		pointToLayer(feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 8,
+				fillColor: '#5b2e2e',
+				color: '#FFFFFF ',   
+				weight: 2,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	}).addTo(map);	
+</script>
+</body>
+</html>
