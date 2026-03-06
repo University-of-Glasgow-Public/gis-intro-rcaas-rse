@@ -1,4 +1,10 @@
-"""
+# app.py
+"""Main application file for the gis intro app.
+
+The module contains the main flask application and all routes. 
+It also contains some helper functions to build a polygon from 
+form data and to retrieve site names and site documents from the database.
+
 © 2026 University of Glasgow
 Licensed under the BSD 3-Clause License
 """
@@ -13,17 +19,20 @@ mongo.init_app(app) # initialise this PyMongo ready for use
 
 @app.route('/search', methods=['GET'])
 def search():
-    """
-    Returns the search page
-    """
+    """Returns the search form page with a dropdown of site names to search within."""
     sites = retrieve_site_names()
     return render_template('search.html', sites=sites)
 
 @app.route('/results', methods=['POST'])
-def bothy():
-    """
+def results():
+    """Returns the results from the search page.
+
     Process the search form and return a page with a map
-    showing bothies
+    showing bothies that match the search criteria. Search 
+    criteria can be a name, a circle defined by a centre point and radius,
+    or a site defined by a polygon. If no search criteria is provided, 
+    all bothies are returned. N.B. Form validation is non existent. 
+    Consider wtf forms.
     """
     data = {}
     result = request.form
@@ -66,18 +75,17 @@ def bothy():
 
 @app.route('/bothyform', methods=['GET'])
 def bothyform():
-    """
-    Return a page with a map and form
-    """
+    """Return a page with a map and form."""
     return render_template('addbothy.html')
 
 @app.route('/addbothy', methods=['POST'])
 def addbothy():
-    """
+    """Creates a new bothy document.
+    
     Processes the bothy form and creates a new bothy representation
     as a dictionary, inserts the new record and returns the 
-    map page with all bothies and sites.
-    N.B. Form validation is non existent. Consider wtf forms.
+    map page with all bothies and sites.  N.B. Form validation is non existent. 
+    Consider wtf forms.
     """
     result = request.form
     longitude = float(result["Longitude"])
@@ -99,18 +107,17 @@ def addbothy():
 
 @app.route('/siteform', methods=['GET'])
 def siteform():
-    """
-    Return and add site map and form
-    """
+    """Return and add site map and form."""
     return render_template('addsite.html')
 
 @app.route('/addsite', methods=['POST'])
 def addsite():
-    """
+    """Creates a new site document.
+
     Processes the site form and creates a new site representation
     as a dictionary, inserts the new record and returns the 
-    map page with all bothies and sites.
-    N.B. Form validation is non existent. Consider wtf forms.
+    map page with all bothies and sites. N.B. Form validation is non existent. 
+    Consider wtf forms.
     """
     result = request.form
     longitude = result["Longitude"]
@@ -132,9 +139,7 @@ def addsite():
                                longitude=0.0, latitude=0.0, distance=0.0)
 
 def build_polygon(longitude,latitude):
-    """
-    Takes a string of longitudes and latitudes specified by the user and convert
-    to polygon specification
+    """Converts a string of longitudes and latitudes to a polygon specification.
 
     :param longitude: a csv string of longitudes for all points specified
     that will have a trailing comma and may or may not have the same point
@@ -162,9 +167,10 @@ def build_polygon(longitude,latitude):
     return polygon_coords
 
 def retrieve_site_names():
-    """
+    """returns a list of site names.
+    
     Finds all the site documents with just the property name field 
-    key and value and pulls out the property name field value
+    key and value and pulls out the property name field value.
 
     :return: a unique list of site names excluding any empty names
     :rtype: Array
@@ -178,8 +184,7 @@ def retrieve_site_names():
     return site_list
 
 def retrieve_sites():
-    """
-    Get all site documents
+    """Returns all site documents.
     
     :return: all site documents without the id field
     :rtype: Cursor    
