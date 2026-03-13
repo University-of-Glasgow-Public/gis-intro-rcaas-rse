@@ -1,13 +1,10 @@
 <!-- © 2026 University of Glasgow. Licensed under the BSD 3-Clause License. -->
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-</head>
-<body>
-    <div id="map" style="width: 100vw; height: 100vh;"></div>
+{% extends "base.html" %}
+{% block content %}
+<div class="mt-1 p-5 bg-tertiary text-black rounded">
+        <h2>Add New Site</h2>  
+        <h3>Click on the map to specify the site boundary or enter coordinates manually using the form:</h3>  
+        <div id="map"></div>
     <script>
 	const map = L.map('map').setView([57.3, -5], 6);
 	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -32,12 +29,29 @@
 	}
     map.on('click', onMapClick);
 </script>
-    <h2>Add New Site</h2>
     <form action = "http://127.0.0.1:5000/addsite" method = "POST"> 
-        <p>Name <input type = "text" name = "Name" /></p> 
-        <p>Longitude <input type = "text" id="longitude" name = "Longitude" size="50"/></p> 
-        <p>Latitude <input type = "text" id="latitude" name = "Latitude" size="50"/></p> 
-        <p><input type = "submit" value = "submit" /></p> 
+            <fieldset>
+                <legend>Site Details(all fields required):</legend>
+                <div class="form-group">
+                    <label for="site">Site Name</label>
+                    <input type="text" class="form-control" id="site"  name="SiteName">
+                </div>
+                <div class="form-group">
+                    <label for="longitude">Longitude</label>
+                    <input type="text" class="form-control" id="longitude" aria-describedby="longitudeHelp"  name="Longitude">
+                    <small id="longitudeHelp" class="form-text text-muted">If entering manually, ensure all values are separated by commas. You do not need to close off the polygon.</small>
+                </div>
+                <div class="form-group">
+                    <label for="latitude">Latitude</label>
+                    <input type="text" class="form-control" id="latitude" aria-describedby="latitudeHelp" name="Latitude">
+                    <small id="latitudeHelp" class="form-text text-muted">If entering manually, ensure all values are separated by commas. You do not need to close off the polygon.</small>
+                </div>
+            </fieldset>
+            <div class="row mt-4">
+                <div class="col-sm-10 offset-sm-2">
+                    <input type = "submit" value = "Submit" class="btn btn-primary"/>
+                </div>
+            </div>
     </form> 
-</body>
-</html>
+</div>
+{% endblock content %}

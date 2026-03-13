@@ -1,0 +1,99 @@
+body {
+  background: #fafafa;
+  color: #333333;
+  margin-top: 5rem;
+}
+
+#map{
+  height: 600px;
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #666;
+  border-radius: 8px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
+
+fieldset {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #666;
+  border-radius: 8px;
+}
+
+.bg-blue {
+  background-color: #003865;
+}
+
+
+
+.div-bottom {
+  margin-bottom: 20px;
+}
+
+* {box-sizing: border-box;}
+
+.img-magnifier-container {
+  position: relative;
+}
+
+.img-magnifier-glass {
+  position: absolute;
+  border: 3px solid #000;
+  border-radius: 50%;
+  cursor: none;
+  /*Set the size of the magnifier glass:*/
+  width: 100px;
+  height: 100px;
+}
+
+* {box-sizing: border-box}
+
+/* Container needed to position the overlay. Adjust the width as needed */
+.container-image {
+  position: relative;
+  width: 50%;
+  max-width: 300px;
+}
+
+/* Make the image to responsive */
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  color: #f1f1f1;
+  width: 100%;
+  transition: .5s ease;
+  opacity:0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+/* When you mouse over the container, fade in the overlay title */
+.container:hover .overlay {
+  opacity: 1;
+}
+
+
+html, body {
+      height: 100%;
+    }
+    /* The main content will take up the remaining space */
+    .content {
+      flex: 1 0 auto;
+    }
+    /* Sticky footer will be fixed at the bottom */
+    .footer {
+      flex-shrink: 0;
+    }

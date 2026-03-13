@@ -23,55 +23,61 @@ def search():
     sites = retrieve_site_names()
     return render_template('search.html', sites=sites)
 
-@app.route('/results', methods=['POST'])
-def results():
-    """Returns the results from the search page.
 
-    Process the search form and return a page with a map
+@app.route('/results', methods=['POST', 'GET'])
+def results():
+    """Returns a map of bothies and sites.
+
+    POST: Process the search form and return a page with a map
     showing bothies that match the search criteria. Search 
     criteria can be a name, a circle defined by a centre point and radius,
     or a site defined by a polygon. If no search criteria is provided, 
-    all bothies are returned. N.B. Form validation is non existent. 
+    no bothies are returned, but sites will be shown. 
+    N.B. Form validation is non existent. 
     Consider wtf forms.
+
+    GET: Return a page with a map showing all bothies and sites.
     """
     data = {}
     result = request.form
     longitude = 0.0
     latitude = 0.0
-    distance = 0
-    # User is searching by name
-    if result["Name"]:
-        data = mongo.db.bothies.find_one({"properties.name": result["Name"]},{"_id": 0})
-    # User is searching within a circle
-    elif result["Longitude"] and result["Latitude"] and result["Distance"]:
-        longitude = float(result["Longitude"])
-        latitude = float(result["Latitude"])
-        distance = float(result["Distance"])
-        data = mongo.db.bothies.find(
-            {"geometry":
-                {"$nearSphere":
-                    {"$geometry":
-                        {"type": "Point", "coordinates": [ longitude,latitude ]},
-                        "$maxDistance": distance
+    radius = 0
+    if(request.method == 'POST'):        
+        # User is searching by name
+        if result["Name"]:
+            data = mongo.db.bothies.find_one({"properties.name": result["Name"]},{"_id": 0})
+        # User is searching within a circle
+        elif result["Longitude"] and result["Latitude"] and result["Radius"]:
+            longitude = float(result["Longitude"])
+            latitude = float(result["Latitude"])
+            radius = float(result["Radius"])
+            data = mongo.db.bothies.find(
+                {"geometry":
+                    {"$nearSphere":
+                        {"$geometry":
+                            {"type": "Point", "coordinates": [ longitude,latitude ]},
+                            "$maxDistance": radius
+                         }
                     }
-                }
-            },{"_id": 0}
-        )
-    # User is searching within a site
-    elif result["Site"] != "site_unselected":
-        # Find the site document by name
-        site = mongo.db.sites.find_one({"properties.name": result["Site"]})
-        # Use the geometry property of the site to specify the region in which to search
-        data = mongo.db.bothies.find(
-            {"geometry": {"$geoWithin": {"$geometry": site["geometry"]}}},{"_id": 0}
-        )
-    # User is not constraining the result set
-    else:
+                },{"_id": 0}
+            )
+        # User is searching within a site
+        elif result["Site"] != "site_unselected":
+            # Find the site document by name
+            site = mongo.db.sites.find_one({"properties.name": result["Site"]})
+            # Use the geometry property of the site to specify the region in which to search
+            data = mongo.db.bothies.find(
+                {"geometry": {"$geoWithin": {"$geometry": site["geometry"]}}},{"_id": 0}
+            )
+
+    if(request.method == 'GET'):
         # Find all but dont include the id field
-        data = mongo.db.bothies.find({},{"_id": 0})
+        data = mongo.db.bothies.find({},{"_id": 0})  
+
     sites = retrieve_sites()
     return render_template("bothies.html", data=data, sites=sites,
-                           longitude=longitude, latitude=latitude, distance=distance)
+                           longitude=longitude, latitude=latitude, radius=radius)
 
 @app.route('/bothyform', methods=['GET'])
 def bothyform():
@@ -103,7 +109,7 @@ def addbothy():
     # Find all sites
     sites = retrieve_sites()
     return render_template("bothies.html", data=data, sites=sites,
-                           longitude=0.0, latitude=0.0, distance=0.0)
+                           longitude=0.0, latitude=0.0, radius=0.0)
 
 @app.route('/siteform', methods=['GET'])
 def siteform():
@@ -136,7 +142,7 @@ def addsite():
     # Find all sites, including the new one
     sites = retrieve_sites()
     return render_template("bothies.html", data=data, sites=sites,
-                               longitude=0.0, latitude=0.0, distance=0.0)
+                               longitude=0.0, latitude=0.0, radius=0.0)
 
 def build_polygon(longitude,latitude):
     """Converts a string of longitudes and latitudes to a polygon specification.

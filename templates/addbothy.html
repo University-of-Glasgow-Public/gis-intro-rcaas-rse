@@ -1,36 +1,56 @@
-<!-- © 2026 University of Glasgow. Licensed under the BSD 3-Clause License -->
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-</head>
-<body>
-    <div id="map" style="width: 100vw; height: 100vh;"></div>
-    <script>
-	    const map = L.map('map').setView([57.3, -5], 6);
-	    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		    maxZoom: 19,
-		    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	    }).addTo(map);
-        var marker = {};
-	    function onMapClick(e) {
-            if (marker != undefined) {
-                map.removeLayer(marker);
-            };
-            marker = new L.Marker(e.latlng);       
-            map.addLayer(marker);
-            document.getElementById('latitude').value = e.latlng.lat;
-            document.getElementById('longitude').value = e.latlng.lng;
-	    }
-        map.on('click', onMapClick);
-    </script>
-    <h2>Add New Bothy</h2>
-    <form action = "http://127.0.0.1:5000/addbothy" method = "POST"> 
-        <p>Name <input type = "text" name = "Name" /></p> 
-        <p>Longitude <input type = "text" id="longitude" name = "Longitude" value=""/> Latitude <input type = "text" id="latitude" name = "Latitude" /></p> 
-        <p><input type = "submit" value = "submit" /></p> 
-    </form> 
-</body>
-</html>
+<!-- © 2026 University of Glasgow. Licensed under the BSD 3-Clause License. -->
+{% extends "base.html" %}
+{% block content %}
+<div class="mt-1 p-5 bg-tertiary text-black rounded">
+
+        <h2>Add New Bothy</h2>  
+        <h3>Click on the map to specify the location or enter coordinates manually using the form:</h3>  
+        <div id="map"></div>
+        <script>
+	        const map = L.map('map').setView([57.3, -5], 6);
+	        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		        maxZoom: 19,
+		        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	        }).addTo(map);
+            var marker = {};
+	        function onMapClick(e) {
+                if (marker != undefined) {
+                    map.removeLayer(marker);
+                };
+                marker = new L.Marker(e.latlng);       
+                map.addLayer(marker);
+                document.getElementById('latitude').value = e.latlng.lat;
+                document.getElementById('longitude').value = e.latlng.lng;
+	        }
+            map.on('click', onMapClick);
+        </script>    
+        <form action = "http://127.0.0.1:5000/addbothy" method = "POST"> 
+            <fieldset>
+                <legend>Bothy Details(all fields required):</legend>
+                <div class="form-group row">
+                    <label for="bothyname">Bothy Name:</label>
+                    <div class="col-sm-10">
+                        <input id="bothyname" type = "text" name = "Name" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="longitude">Longitude:</label>
+                    <div class="col-sm-10">
+                        <input id="longitude" type = "text" name = "Longitude" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="latitude">Latitude:</label>
+                    <div class="col-sm-10">
+                        <input id="latitude" type = "text" name = "Latitude" />
+                    </div>
+                </div>
+            </fieldset>
+            <div class="row mt-4">
+                <div class="col-sm-10 offset-sm-2">
+                    <input type = "submit" value = "Submit" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form> 
+</div>
+{% endblock content %}

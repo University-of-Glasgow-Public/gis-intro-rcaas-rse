@@ -1,13 +1,8 @@
-<!-- © 2026 University of Glasgow. Licensed under the BSD 3-Clause License -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-</head>
-<body>
-<div id="map" style="width: 100vw; height: 100vh;"></div>
+<!-- © 2026 University of Glasgow. Licensed under the BSD 3-Clause License. -->
+{% extends "base.html" %}
+{% block content %}
+<div class="mt-1 p-5 bg-tertiary text-black rounded">
+<div id="map"></div>
 <script>
 	const map = L.map('map').setView([57.3, -5], 6);
 	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -23,12 +18,12 @@
 	}
 	var longitude = {{ longitude }};
 	var latitude = {{ latitude }};
-	var distance = {{ distance }};
+	var radius = {{ radius }};
 	const circle = L.circle([latitude,longitude], {
 		color: 'red',
 		fillColor: '#f03',
 		fillOpacity: 0.5,
-		radius: distance
+		radius: radius
 	}).addTo(map);
 	var sites = {{ sites|tojson }};
 	const siteLayer = L.geoJSON(sites, {
@@ -50,5 +45,5 @@
 		}
 	}).addTo(map);	
 </script>
-</body>
-</html>
+</div>
+{% endblock content %}

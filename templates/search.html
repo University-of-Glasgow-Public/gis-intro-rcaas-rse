@@ -1,16 +1,58 @@
 <!-- © 2026 University of Glasgow. Licensed under the BSD 3-Clause License. -->
-<html> 
-<body> 
-    <form action = "http://127.0.0.1:5000/results" method = "POST"> 
-        <p>Name <input type = "text" name = "Name" /></p> 
-        <p>Longitude <input type = "text" name = "Longitude" /> Latitude <input type = "text" name = "Latitude" /> Distance  <input type = "text" name = "Distance" /></p> 
-        <p>Site <select name="Site">
-            <option value="site_unselected">--Please Select--</option>
-            {% for site in sites %}
-                <option value="{{site}}">{{site}}</option>
-            {% endfor %}
-        </select></p>
-        <p><input type = "submit" value = "submit" /></p> 
-    </form> 
-</body> 
-</html> 
+{% extends "base.html" %}
+{% block content %}
+<div class="mt-1 p-5 bg-tertiary text-black rounded">
+        <h2>Search for bothies by name, location, or site</h2>
+        <form action = "http://127.0.0.1:5000/results" method = "POST"> 
+            <fieldset>
+                <legend>Search by bothy name:</legend>            
+                <div class="form-group row">
+                    <label for="bothyname">Bothy Name:</label>
+                    <div class="col-sm-10">
+                        <input id="bothyname" type = "text" name = "Name" />
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Or search within a circle (all fields required):</legend>
+                <div class="form-group row">
+                    <label for="longitude">Central Longitude:</label>
+                    <div class="col-sm-10">
+                        <input id="longitude" type = "text" name = "Longitude" />
+                    </div>
+                </div>     
+                <div class="form-group row">
+                    <label for="latitude">Central Latitude:</label>
+                    <div class="col-sm-10">
+                        <input id="latitude" type = "text" name = "Latitude" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="radius">Radius (in meters):</label>
+                    <div class="col-sm-10">
+                        <input id="radius" type = "text" name = "Radius" />
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Or search within a site:</legend>
+                <div class="form-group row">
+                    <label for="sitenames">Site:</label>
+                    <div class="col-sm-10">
+                        <select id="sitenames" name="Site">
+                            <option value="site_unselected">--Please Select--</option>
+                            {% for site in sites %}
+                                <option value="{{site}}">{{site}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="row mt-4">
+                <div class="col-sm-10 offset-sm-2">
+                    <input type = "submit" value = "Search" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form> 
+</div>
+{% endblock content %}
