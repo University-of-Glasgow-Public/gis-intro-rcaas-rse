@@ -640,7 +640,68 @@ uv init [project name] to set up the core project content. E.g.,</p>
 </span><span id="__span-5-184"><a id="__codelineno-5-184" name="__codelineno-5-184" href="#__codelineno-5-184"></a>if __name__ == &#39;__main__&#39;:
 </span><span id="__span-5-185"><a id="__codelineno-5-185" name="__codelineno-5-185" href="#__codelineno-5-185"></a>    app.run(debug=True)
 </span></code></pre></div>
-<p>The search function will be called when the application’s root directory '/' is visited. It will return a basic search form that we will use to find bothies and present them on a map. The form action is to visit /bothy and the bothy method will handle this. If you have an issue with the flask import this may be resolved by changing the interpreter to the one in your environment by opening the Command Palette(cmd+shift+p on mac or ctrl+shift+p on windows) and selecting the Python: Select Interpreter and then selecting the one in the .venv in the BOTHY folder.</p>
+<p>The search function will be called when the application’s search directory '/search' is visited.
+It will return a basic search form that we will use to find bothies and present them on a map.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>@app.route(&#39;/search&#39;, methods=[&#39;GET&#39;])
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>def search():
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    &quot;&quot;&quot;Returns the search form page with a dropdown of site names to search within.&quot;&quot;&quot;
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    sites = retrieve_site_names()
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    return render_template(&#39;search.html&#39;, sites=sites)
+</span></code></pre></div>
+<p>Lets build that page as shown below:</p>
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>The form action is to visit /bothy and the bothy method will handle this. 
+</span></code></pre></div>
+@app.route('/results', methods=['POST'])
+def results():
+    """Returns the results from the search page.</p>
+<div class="language-text highlight"><pre><span></span><code>Process the search form and return a page with a map
+showing bothies that match the search criteria. Search 
+criteria can be a name, a circle defined by a centre point and radius,
+or a site defined by a polygon. If no search criteria is provided, 
+all bothies are returned. N.B. Form validation is non existent. 
+Consider wtf forms.
+&quot;&quot;&quot;
+data = {}
+result = request.form
+longitude = 0.0
+latitude = 0.0
+distance = 0
+# User is searching by name
+if result[&quot;Name&quot;]:
+    data = mongo.db.bothies.find_one({&quot;properties.name&quot;: result[&quot;Name&quot;]},{&quot;_id&quot;: 0})
+# User is searching within a circle
+elif result[&quot;Longitude&quot;] and result[&quot;Latitude&quot;] and result[&quot;Distance&quot;]:
+    longitude = float(result[&quot;Longitude&quot;])
+    latitude = float(result[&quot;Latitude&quot;])
+    distance = float(result[&quot;Distance&quot;])
+    data = mongo.db.bothies.find(
+        {&quot;geometry&quot;:
+            {&quot;$nearSphere&quot;:
+                {&quot;$geometry&quot;:
+                    {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [ longitude,latitude ]},
+                    &quot;$maxDistance&quot;: distance
+                }
+            }
+        },{&quot;_id&quot;: 0}
+    )
+# User is searching within a site
+elif result[&quot;Site&quot;] != &quot;site_unselected&quot;:
+    # Find the site document by name
+    site = mongo.db.sites.find_one({&quot;properties.name&quot;: result[&quot;Site&quot;]})
+    # Use the geometry property of the site to specify the region in which to search
+    data = mongo.db.bothies.find(
+        {&quot;geometry&quot;: {&quot;$geoWithin&quot;: {&quot;$geometry&quot;: site[&quot;geometry&quot;]}}},{&quot;_id&quot;: 0}
+    )
+# User is not constraining the result set
+else:
+    # Find all but dont include the id field
+    data = mongo.db.bothies.find({},{&quot;_id&quot;: 0})
+sites = retrieve_sites()
+return render_template(&quot;bothies.html&quot;, data=data, sites=sites,
+                       longitude=longitude, latitude=latitude, distance=distance)
+</code></pre></div>
+<p>```  </p>
+<p>If you have an issue with the flask import this may be resolved by changing the interpreter to the one in your environment by opening the Command Palette(cmd+shift+p on mac or ctrl+shift+p on windows) and selecting the Python: Select Interpreter and then selecting the one in the .venv in the BOTHY folder.</p>
 <p>Create a template folder and add a search and results page: search.html and bothies.html, with content as shown below.</p>
 <p>Execute: flask run # if this fails check if your environment is active.</p>
 <p>Enter this URLin the browser of your choice: http://127.0.0.1:5000/</p>
