@@ -4,6 +4,12 @@ body {
   margin-top: 5rem;
 }
 
+header {
+
+  background: #003865;
+
+}
+
 #map{
   height: 600px;
   margin: 20px;
@@ -27,7 +33,9 @@ fieldset {
   background-color: #003865;
 }
 
-
+.text-white {
+  color: #ffffff;
+}
 
 .div-bottom {
   margin-bottom: 20px;

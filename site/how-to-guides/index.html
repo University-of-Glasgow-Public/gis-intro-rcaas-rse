@@ -65,6 +65,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#test-accessibility" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -214,6 +219,24 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to guides
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -230,6 +253,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-accessibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Accessibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -307,6 +358,25 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-accessibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Accessibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -324,7 +394,14 @@
 
   <h1>How to guides</h1>
 
-
+<h2 id="test-accessibility">Test Accessibility</h2>
+<ol>
+<li>Tab through the site (i.e., without using the mouse) to check the order is natural and all items can be accessed.</li>
+<li>Use a screen reader to access the site.</li>
+<li>In Chrome, select View / Developer / Developer Tools. In the right hand pane select the Lighthouse tab, 
+select the default navigation, Desktop, and all four categeories and click the Analyse page load button.</li>
+</ol>
+<p><img alt="lighthouse report" src="../images/lighthouseReport.png" /></p>
 
 
 

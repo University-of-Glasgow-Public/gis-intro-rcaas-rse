@@ -1,49 +1,49 @@
-<!-- © 2026 University of Glasgow. Licensed under the BSD 3-Clause License. -->
 {% extends "base.html" %}
+{% block title %}Bothies and Sites Map{% endblock %}
 {% block content %}
 <div class="mt-1 p-5 bg-tertiary text-black rounded">
-<div id="map"></div>
-<script>
-	const map = L.map('map').setView([57.3, -5], 6);
-	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
-	function onEachFeature(feature, layer) {
-		var content = '<p>Details:</p>';
-		if (feature.properties && feature.properties.name) {
-			content += '<p>name: ' + feature.properties.name + '</p>';
+	<div id="map"></div>
+	<script>
+		const map = L.map('map').setView([57.3, -5], 6);
+		const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		}).addTo(map);
+		function onEachFeature(feature, layer) {
+			var content = '<p>Details:</p>';
+			if (feature.properties && feature.properties.name) {
+				content += '<p>name: ' + feature.properties.name + '</p>';
+			}
+			layer.bindPopup(content);
 		}
-		layer.bindPopup(content);
-	}
-	var longitude = {{ longitude }};
-	var latitude = {{ latitude }};
-	var radius = {{ radius }};
-	const circle = L.circle([latitude,longitude], {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.5,
-		radius: radius
-	}).addTo(map);
-	var sites = {{ sites|tojson }};
-	const siteLayer = L.geoJSON(sites, {
-		onEachFeature,
-		pointToLayer(feature, latlng) {}
-	}).addTo(map);
-	var geojson = {{ data|tojson }};
-    const bothyLayer = L.geoJSON(geojson, {
-		onEachFeature,
-		pointToLayer(feature, latlng) {
-			return L.circleMarker(latlng, {
-				radius: 8,
-				fillColor: '#5b2e2e',
-				color: '#FFFFFF ',   
-				weight: 2,
-				opacity: 1,
-				fillOpacity: 0.8
-			});
-		}
-	}).addTo(map);	
-</script>
+		var longitude = {{ longitude }};
+		var latitude = {{ latitude }};
+		var radius = {{ radius }};
+		const circle = L.circle([latitude, longitude], {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: 0.5,
+			radius: radius
+		}).addTo(map);
+		var sites = {{ sites| tojson }};
+		const siteLayer = L.geoJSON(sites, {
+			onEachFeature,
+			pointToLayer(feature, latlng) { }
+		}).addTo(map);
+		var geojson = {{ data| tojson }};
+		const bothyLayer = L.geoJSON(geojson, {
+			onEachFeature,
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 8,
+					fillColor: '#5b2e2e',
+					color: '#FFFFFF ',
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		}).addTo(map);	
+	</script>
 </div>
 {% endblock content %}
