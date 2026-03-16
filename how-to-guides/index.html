@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#test-accessibility" class="md-skip">
+        <a href="#mkdocs" class="md-skip">
           Skip to content
         </a>
       
@@ -268,6 +268,39 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#mkdocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MkDocs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formatting-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formatting HTML
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#achieving-wcag-level-aa-accesibility-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Achieving WCAG level AA accesibility checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#test-accessibility" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -365,6 +398,39 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#mkdocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MkDocs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formatting-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formatting HTML
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#achieving-wcag-level-aa-accesibility-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Achieving WCAG level AA accesibility checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#test-accessibility" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -394,6 +460,28 @@
 
   <h1>How to guides</h1>
 
+<h2 id="mkdocs">MkDocs</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mkdocs gh-deploy
+</span></code></pre></div>
+<h2 id="formatting-html">Formatting HTML</h2>
+<p>To format an html page open it, place the cursor at the template start and execute 'option shift F'. 
+This will:</p>
+<ol>
+<li>ensure no lines are too long,</li>
+<li>ensure HTML is properly indented,</li>
+<li>insert a blank line between the open html and open head tag, the close head and open body tag 
+and the close body and the close html tag.</li>
+</ol>
+<h2 id="achieving-wcag-level-aa-accesibility-checklist">Achieving WCAG level AA accesibility checklist</h2>
+<ol>
+<li>HTML tag has lang="en' attribute.</li>
+<li>Language changes are marked with qualified span tag. (Not applicable to this application.)</li>
+<li>Template pages use defined structures: head, body header, nav and main.</li>
+<li>Links to new pages are implemented with <a> tags.</li>
+<li>Link images have an alt attribute specifying the link target and the <a> tag does NOT also have a aria-label attribute (which would be redundent). N.B. the Chrome lighthouse report will suggest that you need aria-label
+but we think that is incorrect.</li>
+<li>Form fields have <label> tags.</li>
+</ol>
 <h2 id="test-accessibility">Test Accessibility</h2>
 <ol>
 <li>Tab through the site (i.e., without using the mouse) to check the order is natural and all items can be accessed.</li>
