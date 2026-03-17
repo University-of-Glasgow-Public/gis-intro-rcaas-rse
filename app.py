@@ -128,7 +128,7 @@ def addsite():
     result = request.form
     longitude = result["Longitude"]
     latitude = result["Latitude"]
-    name = result["Name"]
+    name = result["SiteName"]
     polygon = [build_polygon(longitude,latitude)]
     site = {
         "type": "Feature",

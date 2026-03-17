@@ -16,32 +16,31 @@
 </head>
 
 <body class="d-flex flex-column pt-5">
-    <nav class="navbar navbar-expand-lg bg-blue fixed-top" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand mr-4" href="https://www.gla.ac.uk/"
-                    aria-label="Go to University of Glasgow homepage">
-                    <img src="{{ url_for('static', filename='images/UoG_keyline.png') }}" width="194.1" height="60.3"
-                        alt="University of Glasgow Logo">
-                </a>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-blue fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand mr-4" href="https://www.gla.ac.uk/">
+                        <img src="{{ url_for('static', filename='images/UoG_keyline.png') }}" width="194.1"
+                            height="60.3" alt="Link to University of Glasgow homepage">
+                    </a>
+                </div>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('results') }}">View All
+                            Bothies</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('search') }}">Search
+                            Bothies</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('bothyform') }}">Add Bothy</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('siteform') }}">Add
+                            Site</a>
+                    </li>
+                </ul>
             </div>
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0" role="menubar">
-                <li class="nav-item" role="menuitem"><a class="nav-link text-white" href="{{ url_for('results') }}">View
-                        All</a>
-                </li>
-                <li class="nav-item" role="menuitem"><a class="nav-link text-white"
-                        href="{{ url_for('search') }}">Refine View</a>
-                </li>
-                <li class="nav-item" role="menuitem"><a class="nav-link text-white"
-                        href="{{ url_for('bothyform') }}">Add Bothy</a>
-                </li>
-                <li class="nav-item" role="menuitem"><a class="nav-link text-white" href="{{ url_for('siteform') }}">Add
-                        Site</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+        </nav>
+    </header>
     <main role="main" class="container mt-5 pt-4">
         {% block content %}{% endblock %}
     </main>

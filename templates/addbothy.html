@@ -11,12 +11,18 @@
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
+        var customIcon = L.icon({
+            iconUrl: '{{ url_for('static', filename='images/red_marker.png')}}',
+            iconSize: [14, 25], // size of the icon
+            iconAnchor: [7, 25], // point of the icon which will correspond to marker's location
+            popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
         var marker = {};
         function onMapClick(e) {
             if (marker != undefined) {
                 map.removeLayer(marker);
             };
-            marker = new L.Marker(e.latlng);
+            marker = new L.Marker(e.latlng, { icon: customIcon });
             map.addLayer(marker);
             document.getElementById('latitude').value = e.latlng.lat;
             document.getElementById('longitude').value = e.latlng.lng;

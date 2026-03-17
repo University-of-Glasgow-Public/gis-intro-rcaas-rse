@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#test-accessibility" class="md-skip">
+        <a href="#mkdocs" class="md-skip">
           Skip to content
         </a>
       
@@ -268,6 +268,50 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#mkdocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MkDocs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formatting-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formatting HTML
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-contrast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checking contrast
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#achieving-wcag-level-aa-accesibility-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Achieving WCAG level AA accesibility checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#test-accessibility" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -365,6 +409,50 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#mkdocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MkDocs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formatting-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formatting HTML
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-contrast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checking contrast
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#achieving-wcag-level-aa-accesibility-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Achieving WCAG level AA accesibility checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#test-accessibility" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -394,6 +482,37 @@
 
   <h1>How to guides</h1>
 
+<h2 id="mkdocs">MkDocs</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mkdocs gh-deploy
+</span></code></pre></div>
+<h2 id="formatting-html">Formatting HTML</h2>
+<p>To format an html page open it, place the cursor at the template start and execute 'option shift F'. 
+This will:</p>
+<ol>
+<li>ensure no lines are too long,</li>
+<li>ensure HTML is properly indented,</li>
+<li>insert a blank line between the open html and open head tag, the close head and open body tag 
+and the close body and the close html tag.</li>
+</ol>
+<h2 id="checking-contrast">Checking contrast</h2>
+<p>https://webaim.org/resources/contrastchecker/</p>
+<p>To determine what colours are on a page that are not defined in the template file use the Chrome Color Picker extension.</p>
+<h2 id="achieving-wcag-level-aa-accesibility-checklist">Achieving WCAG level AA accesibility checklist</h2>
+<ol>
+<li>HTML tag has lang="en' attribute.</li>
+<li>Language changes are marked with qualified span tag. (Not applicable to this application.)</li>
+<li>Template pages use semantically rich structures: head, body header, nav and main that do NOT include redundent role attributes.</li>
+<li>Links to new pages are implemented with <code>&lt;a&gt;</code> tags.</li>
+<li>Link images have an alt attribute specifying the link target and the <code>&lt;a&gt;</code> tag does NOT also have an aria-label attribute (which would be redundent). N.B. the Chrome lighthouse report will suggest that you need aria-label
+but we think that is incorrect.</li>
+<li>Link text is adequately descriptive.</li>
+<li>The singular list within the <code>&lt;nav&gt;</code> section does not have redundent role information within the <code>&lt;ul&gt;</code> and <code>&lt;li&gt;</code> tags.</li>
+<li>Individual pages that inherit the base.html page have individual <code>&lt;title&gt;</code> element values.</li>
+<li>The <code>&lt;head&gt;</code> section has the required <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code> specification that does not disable zooming, and also has the recommended <code>&lt;meta charset="UTF-8"&gt;</code> specification.</li>
+<li>Form fields have <code>&lt;label&gt;</code> tags.</li>
+<li>Colour is not the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element, and the visual presentation of text and images of text has a contrast ratio of at least 4.5:1 (header section blue and white contrast is 11.97:1). </li>
+<li>The visual presentation of User Interface components such as the map have a contrast ratio of at least 3:1 against adjacent colour. The map sea blue is #aad3df and the background is #fafafa giving a contrast ratio of only 1.53:1 but with the addition of a border matching the <code>&lt;nav&gt;</code> bar colour, the contrast ratio is raised to 7.46:1. The bothy icons are #705148 and areas of moorland are #dee1b2 and areas of forest are #bddab1 giving adequate color ratios of 5.24 and 4.67 respectively. For bothies found within circles or polygons the contrast ratio is &gt; 3.  The polygon border has a contrast ratio of 8.09 and 7.3 with areas of moorland and forest respectively. N.B some areas of the background map when compared to each other do NOT meet the acceptance criteria.</li>
+</ol>
 <h2 id="test-accessibility">Test Accessibility</h2>
 <ol>
 <li>Tab through the site (i.e., without using the mouse) to check the order is natural and all items can be accessed.</li>

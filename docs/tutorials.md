@@ -1,17 +1,4 @@
-## MkDocs
-```
-mkdocs gh-deploy
-```
 
-## Formatting HTML
-
-To format an html page open it, place the cursor at the template start and execute alt shift F. 
-This will:
-
-1. ensure no lines are too long,
-2. ensure HTML is properly indented,
-3. insert a blank line between the open html and open head tag, the close head and open body tag 
-and the close body and the close html tag.
 
 ## Developing the main application
 Whilst you could just clone the repository, or browse the content, it is often a more rich experience 
