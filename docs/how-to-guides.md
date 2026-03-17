@@ -48,6 +48,7 @@ but we think that is incorrect.
 14. The map has sufficient contrast to the background if no border is present or to the border if a border is present.
 15. All layers added to the map have sufficient 3:1 constrast ratio with the background map.
 16. Markers on the map have an alt tag and can be tabbed through.
+17. Templates use heading levels without gaps: `<h2>` only or `<h2>` followed by `<h3>`.
 
 ## Test Accessibility
 

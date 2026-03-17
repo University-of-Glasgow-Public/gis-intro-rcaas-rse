@@ -17,7 +17,7 @@
 			fillOpacity: 0.2,
 			radius: radius
 		}).addTo(map);
-		var sites = {{ sites|tojson }};
+		var sites = {{ sites| tojson }};
 		const siteLayer = L.geoJSON(sites, {
 			onEachFeature,
 			style: function (feature) {
@@ -29,7 +29,7 @@
 				};
 			}
 		}).addTo(map);
-		var geojson = {{ data|tojson }};
+		var geojson = {{ data| tojson }};
 		const bothyLayer = L.geoJSON(geojson, {
 			onEachFeature,
 			pointToLayer(feature, latlng) {
