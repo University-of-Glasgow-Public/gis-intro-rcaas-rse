@@ -1,43 +1,43 @@
 {% extends "base.html" %}
 {% block title %}Bothies and Sites Map{% endblock %}
 {% block content %}
-
-<div id="map"></div>
-<script type="text/javascript" src="/static/js/customicon.js"></script>
-<script type="text/javascript" src="/static/js/basemap.js"></script>
-<script type="text/javascript" src="/static/js/oneachfeature.js"></script>
-<script>
-	var longitude = {{ longitude }};
-	var latitude = {{ latitude }};
-	var radius = {{ radius }};
-	const circle = L.circle([latitude, longitude], {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.2,
-		radius: radius
-	}).addTo(map);
-	var sites = {{ sites| tojson }};
-	const siteLayer = L.geoJSON(sites, {
-		onEachFeature,
-		style: function (feature) {
-			return {
-				color: '#003865',
-				fillColor: '#2694d9',
-				fillOpacity: 0.1,
-				weight: 2
-			};
-		}
-	}).addTo(map);
-	var geojson = {{ data| tojson }};
-	const bothyLayer = L.geoJSON(geojson, {
-		onEachFeature,
-		pointToLayer(feature, latlng) {
-			return L.marker(latlng, {
-				icon: customIcon,
-				alt: feature.properties.name
-			});
-		}
-	}).addTo(map);	
-</script>
-
-{% endblock content %}
+<div class="mt-1 p-5 bg-tertiary text-black rounded">
+	<h2>All Bothies and Sites</h2>
+	<div id="map"></div>
+	<script type="text/javascript" src="/static/js/customicon.js"></script>
+	<script type="text/javascript" src="/static/js/basemap.js"></script>
+	<script type="text/javascript" src="/static/js/oneachfeature.js"></script>
+	<script>
+		var longitude = {{ longitude }};
+		var latitude = {{ latitude }};
+		var radius = {{ radius }};
+		const circle = L.circle([latitude, longitude], {
+			color: '#003865',
+			fillColor: '#2694d9',
+			fillOpacity: 0.2,
+			radius: radius
+		}).addTo(map);
+		var sites = {{ sites|tojson }};
+		const siteLayer = L.geoJSON(sites, {
+			onEachFeature,
+			style: function (feature) {
+				return {
+					color: '#003865',
+					fillColor: '#2694d9',
+					fillOpacity: 0.1,
+					weight: 2
+				};
+			}
+		}).addTo(map);
+		var geojson = {{ data|tojson }};
+		const bothyLayer = L.geoJSON(geojson, {
+			onEachFeature,
+			pointToLayer(feature, latlng) {
+				return L.marker(latlng, {
+					icon: customIcon,
+					alt: feature.properties.name
+				});
+			}
+		}).addTo(map);	
+	</script>
+</div {% endblock content %}
