@@ -301,6 +301,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#achieving-wcag-level-aa-accesibility-for-maps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Achieving WCAG level AA accesibility for maps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#achieving-wcag-level-aa-accesibility-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -442,6 +453,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#achieving-wcag-level-aa-accesibility-for-maps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Achieving WCAG level AA accesibility for maps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#achieving-wcag-level-aa-accesibility-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -495,8 +517,17 @@ This will:</p>
 and the close body and the close html tag.</li>
 </ol>
 <h2 id="checking-contrast">Checking contrast</h2>
-<p>https://webaim.org/resources/contrastchecker/</p>
-<p>To determine what colours are on a page that are not defined in the template file use the Chrome Color Picker extension.</p>
+<p><a href="https://webaim.org/resources/contrastchecker/">Contrast Checker</a></p>
+<p>To determine the colours on a page that are not defined in the template file, use the Chrome Color Picker extension.</p>
+<h2 id="achieving-wcag-level-aa-accesibility-for-maps">Achieving WCAG level AA accesibility for maps</h2>
+<p>Maps present a challenge to meeting WCAG level AA criteria, particularly around contrast between regions of background maps. ESRI provide a specialized, worldwide basemap designed with high contrast and colour-vision-deficient-safe colours. This guide does not cover utilisation of that base map but consideration of the use of that map is encouraged, along with thinking about how else the data portreyed on a map can be alternatively presented, e.g., as tabular data. In developing this guide the following items were implemented to improve on accessibility: </p>
+<ol>
+<li>Inclusion of a dark border around the map to improve the contrast ratio of a map.</li>
+<li>Use of image-based point markers (rather than SVG) that facilitate inclusion of an alt tag.</li>
+<li>Addition of an alt tag for all point markers.</li>
+<li>Creation of a custom red point marker (rather the default pale blue marker) that meets the 3:1 contrast ratio requirement.</li>
+<li>Styling the polygon presentation (rather the default blue perimeter) that meets the 3:1 contrast ratio requirement.</li>
+</ol>
 <h2 id="achieving-wcag-level-aa-accesibility-checklist">Achieving WCAG level AA accesibility checklist</h2>
 <ol>
 <li>HTML tag has lang="en' attribute.</li>
@@ -510,8 +541,11 @@ but we think that is incorrect.</li>
 <li>Individual pages that inherit the base.html page have individual <code>&lt;title&gt;</code> element values.</li>
 <li>The <code>&lt;head&gt;</code> section has the required <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code> specification that does not disable zooming, and also has the recommended <code>&lt;meta charset="UTF-8"&gt;</code> specification.</li>
 <li>Form fields have <code>&lt;label&gt;</code> tags.</li>
+<li>Related form content is wrapped in a <code>&lt;fieldset&gt;</code> tag with a <code>&lt;legend&gt;</code> tag.</li>
 <li>Colour is not the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element, and the visual presentation of text and images of text has a contrast ratio of at least 4.5:1 (header section blue and white contrast is 11.97:1). </li>
-<li>The visual presentation of User Interface components such as the map have a contrast ratio of at least 3:1 against adjacent colour. The map sea blue is #aad3df and the background is #fafafa giving a contrast ratio of only 1.53:1 but with the addition of a border matching the <code>&lt;nav&gt;</code> bar colour, the contrast ratio is raised to 7.46:1. The bothy icons are #705148 and areas of moorland are #dee1b2 and areas of forest are #bddab1 giving adequate color ratios of 5.24 and 4.67 respectively. For bothies found within circles or polygons the contrast ratio is &gt; 3.  The polygon border has a contrast ratio of 8.09 and 7.3 with areas of moorland and forest respectively. N.B some areas of the background map when compared to each other do NOT meet the acceptance criteria.</li>
+<li>The map has sufficient contrast to the background if no border is present or to the border if a border is present.</li>
+<li>All layers added to the map have sufficient 3:1 constrast ratio with the background map.</li>
+<li>Markers on the map have an alt tag and can be tabbed through.</li>
 </ol>
 <h2 id="test-accessibility">Test Accessibility</h2>
 <ol>

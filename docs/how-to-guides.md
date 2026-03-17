@@ -23,10 +23,11 @@ To determine the colours on a page that are not defined in the template file, us
 
 Maps present a challenge to meeting WCAG level AA criteria, particularly around contrast between regions of background maps. ESRI provide a specialized, worldwide basemap designed with high contrast and colour-vision-deficient-safe colours. This guide does not cover utilisation of that base map but consideration of the use of that map is encouraged, along with thinking about how else the data portreyed on a map can be alternatively presented, e.g., as tabular data. In developing this guide the following items were implemented to improve on accessibility: 
 
-1. Inclusion of a dark border around the map to improve the contrast ratio of the map with the white background.
-2. Use of image-based markers that facilitate inclusion of an alt tag.
-3. Creation of a custom marker (rather the default pale blue  marker) that meets the 3:1 contrast ratio requirement.
-4. Styling the polygon presentation (rather the default blue perimeter) that meets the 3:1 contrast ratio requirement.
+1. Inclusion of a dark border around the map to improve the contrast ratio of a map.
+2. Use of image-based point markers (rather than SVG) that facilitate inclusion of an alt tag.
+3. Addition of an alt tag for all point markers.
+4. Creation of a custom red point marker (rather the default pale blue marker) that meets the 3:1 contrast ratio requirement.
+5. Styling the polygon presentation (rather the default blue perimeter) that meets the 3:1 contrast ratio requirement.
 
 ## Achieving WCAG level AA accesibility checklist
 
@@ -41,10 +42,12 @@ but we think that is incorrect.
 8. Individual pages that inherit the base.html page have individual `<title>` element values.
 9. The `<head>` section has the required `<meta name="viewport" content="width=device-width, initial-scale=1.0">` specification that does not disable zooming, and also has the recommended `<meta charset="UTF-8">` specification.
 10. Form fields have `<label>` tags.
-11. Colour is not the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element, and the visual presentation of text and images of text has a contrast ratio of at least 4.5:1 (header section blue and white contrast is 11.97:1). 
-12. The map has sufficient contrast to the background if no border is present or to the border if a border is present.
-13. All layers added to the map have sufficient 3:1 constrast ratio with the background map.
-14. Markers on the map have an alt tag and can be tabbed through.
+11. Related form content is wrapped in a `<fieldset>` tag with a `<legend>` tag.
+12. Form fields and/or groups have sufficent descriptive text nearby.
+13. Colour is not the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element, and the visual presentation of text and images of text has a contrast ratio of at least 4.5:1 (header section blue and white contrast is 11.97:1). 
+14. The map has sufficient contrast to the background if no border is present or to the border if a border is present.
+15. All layers added to the map have sufficient 3:1 constrast ratio with the background map.
+16. Markers on the map have an alt tag and can be tabbed through.
 
 ## Test Accessibility
 

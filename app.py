@@ -96,7 +96,7 @@ def addbothy():
     result = request.form
     longitude = float(result["Longitude"])
     latitude = float(result["Latitude"])
-    name = result["Name"]
+    name = result["BothyName"]
     new_bothy = {
         "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [ longitude, latitude ]},
