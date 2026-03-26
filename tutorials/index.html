@@ -465,8 +465,14 @@ constraints specified in the form as well as directly from a URL with no constra
 </span></code></pre></div>
 <p>The method is sensitive to the request method. If the request method is POST then the method checks which
 of the three search types was made. If the Name field is not null then at most only one bothy is returned
-based on the unique name field. The '{"_id": 0}' argument means that the native primary key field is not 
-returned.</p>
+based on the unique name field. The <code>{"_id": 0}</code> argument means that the native primary key field is not 
+returned. If neither Name nor searching in a circle conditions are met then the assumption is the user is
+searching by site as long as an option other than site_unselected has been selected. Step one is to find
+the site by name and use the geometry of that site in step two to define the geoWithin search. If the 
+request method is GET then the method will retun all bothies in the collection (without their primary keys).
+Lastly all sites are retrieved so that they can be rendered on the map and the method returns the user to
+bothies.html along with the bothy and site data and any search by circle specifications so that the bounding 
+circle can be plotted on the map.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>@app.route(&#39;/results&#39;, methods=[&#39;POST&#39;, &#39;GET&#39;])
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>def results():
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    ...
@@ -514,6 +520,46 @@ returned.</p>
 </span><span id="__span-5-45"><a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>    return render_template(&quot;bothies.html&quot;, data=data, sites=sites,
 </span><span id="__span-5-46"><a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>                           longitude=longitude, latitude=latitude, radius=radius)
 </span></code></pre></div>
+<p>The bothyform and siteform methods are called from URLs as defined in the method app.route
+annotations and return form pages addbothy and addsite.html respectively.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>@app.route(&#39;/bothyform&#39;, methods=[&#39;GET&#39;])
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>def bothyform():
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    &quot;&quot;&quot;Return a page with a map and form.&quot;&quot;&quot;
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    return render_template(&#39;addbothy.html&#39;)
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>@app.route(&#39;/siteform&#39;, methods=[&#39;GET&#39;])
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>def siteform():
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    &quot;&quot;&quot;Return and add site map and form.&quot;&quot;&quot;
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    return render_template(&#39;addsite.html&#39;)
+</span></code></pre></div>
+<p>The addbothy method responds to the submission 
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>@app.route(&#39;/addbothy&#39;, methods=[&#39;POST&#39;])
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>def addbothy():
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    &quot;&quot;&quot;Creates a new bothy document. 
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    Processes the bothy form and creates a new bothy representation as a dictionary, 
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    inserts the new record and returns the  map page with all bothies and sites.  
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    N.B. Form validation is non existent. Consider wtf forms.
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    &quot;&quot;&quot;
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    result = request.form
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    longitude = float(result[&quot;Longitude&quot;])
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    latitude = float(result[&quot;Latitude&quot;])
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    name = result[&quot;BothyName&quot;]
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    new_bothy = {
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>        &quot;type&quot;: &quot;Feature&quot;,
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        &quot;geometry&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [longitude, latitude]},
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>        &quot;properties&quot;: {&quot;name&quot;: name}
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>    }
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    # Add the new bothy to the bothy collection
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>    mongo.db.bothies.insert_one(new_bothy)
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>    # Find all bothies, including the new one, excluding the id field
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>    data = mongo.db.bothies.find({}, {&quot;_id&quot;: 0})
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>    # Find all sites
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>    sites = retrieve_sites()
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>    return render_template(&quot;bothies.html&quot;, data=data, sites=sites,
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>                           longitude=0.0, latitude=0.0, radius=0.0)
+</span></code></pre></div></p>
 <p>If you have an issue with the flask import this may be resolved by changing the interpreter to the one in your environment
 by opening the Command Palette(cmd+shift+p on mac or ctrl+shift+p on windows) and selecting the Python: Select Interpreter
 and then selecting the one in the .venv in the BOTHY folder.</p>
@@ -525,7 +571,7 @@ the matching file in the templates folder of this repository:
 * addbothy.html
 * addsite.html</p>
 <p>Start the application (if this fails check if your environment is active).</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>flask run
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>flask run
 </span></code></pre></div>
 <p>Enter this URLin the browser of your choice: http://127.0.0.1:5000/view</p>
 
