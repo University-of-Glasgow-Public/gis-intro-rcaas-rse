@@ -589,7 +589,7 @@ The following imports need to be in the <code>&lt;head&gt;</code> section</p>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    &lt;script src=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js&quot;&gt;&lt;/script&gt;
 </span></code></pre></div>
 <p>You also need to declare a marker cluster variable and add each marker to it:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>        var markers = L.markerClusterGroup();
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>        var markers = L.markerClusterGroup();
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>        const bothyLayer = L.geoJSON(geojson, {
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>            onEachFeature,
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>            pointToLayer(feature, latlng) {
@@ -601,7 +601,7 @@ The following imports need to be in the <code>&lt;head&gt;</code> section</p>
 </span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        }).addTo(markers);
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>        markers.addTo(map);
 </span></code></pre></div>
-<p><img alt="marker cluster" src="../images/markerCluster.png" />
+<img alt="marker cluster" src="../images/markerCluster.png" />
 <img alt="marker cluster expanded" src="../images/markerClusterExpanded.png" /></p>
 
 
