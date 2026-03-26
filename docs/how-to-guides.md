@@ -58,3 +58,35 @@ but we think that is incorrect.
 select the default navigation, Desktop, and all four categeories and click the Analyse page load button.
 
 ![lighthouse report](images/lighthouseReport.png)
+
+## Handle multiple overlapping points
+
+Although in the bothy scenario it is unlikely that two bothies can co-exist in the same location, quite often you do have to deal with
+multiple points at the same location such as a recording site with multiple sensors each recording a datastream, or multiple samples that
+are collected at the same location. Leaflet will not handle this by default but with the Leaflet markercluster plugin this can be handled.
+The following imports need to be in the `<head>` section
+
+```
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
+```
+
+You also need to declare a marker cluster variable and add each marker to it:
+
+```
+		var markers = L.markerClusterGroup();
+		const bothyLayer = L.geoJSON(geojson, {
+			onEachFeature,
+			pointToLayer(feature, latlng) {
+				return L.marker(latlng, {
+					icon: customIcon,
+					alt: feature.properties.name
+				});
+			}
+		}).addTo(markers);
+		markers.addTo(map);
+```
+
+![lighthouse report](images/markerCluster.png)
+![lighthouse report](images/markerClusterExpanded.png)

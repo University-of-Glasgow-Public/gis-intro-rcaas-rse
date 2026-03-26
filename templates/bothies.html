@@ -30,6 +30,7 @@
 			}
 		}).addTo(map);
 		var geojson = {{ data| tojson }};
+		var markers = L.markerClusterGroup();
 		const bothyLayer = L.geoJSON(geojson, {
 			onEachFeature,
 			pointToLayer(feature, latlng) {
@@ -38,6 +39,7 @@
 					alt: feature.properties.name
 				});
 			}
-		}).addTo(map);	
+		}).addTo(markers);
+		markers.addTo(map);
 	</script>
 </div {% endblock content %}
