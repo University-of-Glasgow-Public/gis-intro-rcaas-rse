@@ -1,6 +1,5 @@
 cff-version: 1.2.0
 title: gis-intro-rcaas-rse
-message: "If you use this software, please cite it as below."
 type: software
 license: BSD-3-Clause
 authors:
@@ -23,5 +22,7 @@ version: 1.0.0
 date-released: 2026-06-11
 references:
   - type: article
-    title: "Associated research paper"
+    title: "Example associated research paper"
     doi: 10.xxxx/xxxx
+repository-code: https://github.com/University-of-Glasgow-Public/gis-intro-rcaas-rse
+url: https://university-of-glasgow-public.github.io/gis-intro-rcaas-rse/
