@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: gis-intro-rcaas-rse
+message: "If you use this software, please cite it as below."
+type: software
+license: BSD-3-Clause
+authors:
+  - family-names: Grimwood
+    given-names: Paul
+    orcid: https://orcid.org/0009-0000-7716-1767
+keywords:
+  - GIS
+  - MongoDB
+  - Leaflet
+  - Python
+  - Tutorial
+  - MkDocs
+Abstract: >
+  An introduction to GIS concepts and tools, using MongoDB and Leaflet for spatial data management
+  and visualization, and Python for data analysis. This tutorial is designed for researchers and 
+  practitioners in the field of Research Software Engineering (RSE) who are interested in learning 
+  how to work with geospatial data.
+version: 1.0.0
+date-released: 2026-06-11
+references:
+  - type: article
+    title: "Associated research paper"
+    doi: 10.xxxx/xxxx
