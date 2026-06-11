@@ -8,14 +8,19 @@ form data and to retrieve site names and site documents from the database.
 © 2026 University of Glasgow
 Licensed under the BSD 3-Clause License
 """
+import os
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
 
+
 app = Flask(__name__)
-# Connect to a database, in this case a local database called cocdb
-app.config["MONGO_URI"] = "mongodb://127.0.0.1:27017/cocdb"
-mongo = PyMongo()  # Create a PyMongo object
-mongo.init_app(app)  # initialise this PyMongo ready for use
+
+# Use environment variable (Docker will override this)
+app.config["MONGO_URI"] = os.getenv(
+    "MONGO_URI", "mongodb://127.0.0.1:27017/cocdb")
+
+# Initialize PyMongo
+mongo = PyMongo(app)
 
 
 @app.route('/search', methods=['GET'])
