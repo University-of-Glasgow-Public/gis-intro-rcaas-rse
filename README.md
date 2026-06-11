@@ -6,9 +6,14 @@ Web application using Flask and Python to demonstrate the use of the Leaflet Jav
 
 License: BSD-3-Clause. Flask is licensed under a BSD-3-Clause license. Flask Pymongo, Leaflet and MkDocs are licensed under a BSD-2-clause license, mkdocstrings-python is under a ISC license (functionally equivalent to the BSD 2-Clause license), and mkdocs-material is under an MIT license (similar to the BSD 1-Clause license, that requires only that the copyright notice and license text be included in all copies or derivative works) so to be most consistent and aligned to the least permissive license, the license used here is BSD-3-Clause.
 
+
+
 ## Running the application
 
-To run the application locally:
+This project uses Docker and Docker Compose to run both the Flask application
+(using Gunicorn) and a MongoDB database.
+
+To build and start the application locally:
 
 ```bash
 docker compose up --build
