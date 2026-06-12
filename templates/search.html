@@ -3,7 +3,7 @@
 {% block content %}
 <div class="mt-1 p-5 bg-tertiary text-black rounded">
     <h2>Search for bothies by name, location, or site</h2>
-    <form action="http://127.0.0.1:5000/results" method="POST">
+    <form action="{{ url_for('results') }}" method="POST">
         <fieldset>
             <legend>Search by bothy name:</legend>
             <div class="form-group row">

@@ -7,7 +7,7 @@
     <div id="map"></div>
     <script type="text/javascript" src="/static/js/basemap.js"></script>
     <script type="text/javascript" src="/static/js/constructpolygon.js"></script>
-    <form action="http://127.0.0.1:5000/addsite" method="POST">
+    <form action="{{ url_for('addsite') }}" method="POST">
         <fieldset>
             <legend>Site Details (all fields required):</legend>
             <div class="form-group">

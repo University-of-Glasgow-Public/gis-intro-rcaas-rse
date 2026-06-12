@@ -8,7 +8,7 @@
     <script type="text/javascript" src="/static/js/customicon.js"></script>
     <script type="text/javascript" src="/static/js/basemap.js"></script>
     <script type="text/javascript" src="/static/js/addonepoint.js"></script>
-    <form action="http://127.0.0.1:5000/addbothy" method="POST">
+    <form action="{{ url_for('addbothy') }}" method="POST">
         <fieldset>
             <legend>Bothy Details(all fields required):</legend>
             <div class="form-group row">
