@@ -87,6 +87,8 @@ You also need to declare a marker cluster variable and add each marker to it:
 		}).addTo(markers);
 		markers.addTo(map);
 ```
-
 ![marker cluster](images/markerCluster.png)
 ![marker cluster expanded](images/markerClusterExpanded.png)
+
+
+
