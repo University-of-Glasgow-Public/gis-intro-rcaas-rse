@@ -51,7 +51,8 @@ def results() -> str:
     latitude = 0.0
     radius = 0.0
     db = mongo.db
-    assert db is not None
+    if db is None:
+        raise RuntimeError("MongoDB has not been initialized")
     if request.method == "POST":
         # User is searching by name
         if result["Name"]:
