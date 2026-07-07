@@ -8,5 +8,5 @@ This repository was created to address a number of goals:
 5. Illustrate how to add metadata (TODO)
 6. Illustrate WCAG level AA compliance.
 
-This is a work in progress. It is not perfect but hopefully of sufficient quality to be of use 
+This is a work in progress. It is not perfect but hopefully of sufficient quality to be of use
 if you are looking for guidance in any of these areas.

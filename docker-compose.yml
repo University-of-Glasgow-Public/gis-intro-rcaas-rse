@@ -2,10 +2,7 @@ services:
   web:
     build: .
     ports:
-      # map host port 8000 → container port 5000 (Gunicorn runs on 5000 inside container). 
-      # Only needed for macOS, as MacOS/ControlCenter runs on port 5000 and so can't be 
-      # used for the container. On linux can be left with more usual "5000:5000"
-      - "8000:5000"  
+      - "5000"
     depends_on:
       - mongo
     environment:
