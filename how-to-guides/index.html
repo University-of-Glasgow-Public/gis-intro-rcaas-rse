@@ -553,19 +553,20 @@
 </span></code></pre></div>
 <h2 id="running-unit-tests">Running unit tests</h2>
 <p>The code uses pytest to unit test code and pytest-cov to assess code coverage. These were added as part of
-a general setup including ruff (for formatting and linting) and mypy (for static typing)</p>
-<p><div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># To add pytest and pytest-cov alonfg with other dev dependencies
+a general setup including ruff (for formatting and linting), mypy (for static typing), and precommit. N.B.,
+Testing is currently not incorporated into the pre-commit process and requires a manual execution as shown
+below:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># To add pytest and pytest-cov alonfg with other dev dependencies
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv add --dev pre-commit ruff mypy pytest pytest-cov
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a># To run tests (once you have written them)
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>uv run pytest
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a># To run tests with coverage (once you have written them)
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>uv run pytest --cov=gis_intro_rcaas_rse
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a># To run tests (once you have written them)
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>uv run pytest
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a># To run tests with coverage (once you have written them)
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>uv run pytest --cov=gis_intro_rcaas_rse
 </span></code></pre></div>
 Tests should be placed in a tests folder with files named with the prefix test_ and the name of
-the file being tested. E.g. to test app.p in src/gis_intro_rcaas_rse create a file called 
+the file being tested. E.g. to test app.py in src/gis_intro_rcaas_rse create a file called
 test_app.py in the tests folder. E.g.
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>from unittest.mock import MagicMock, patch
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
@@ -589,9 +590,9 @@ test_app.py in the tests folder. E.g.
 </span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        [1.0, 4.0],
 </span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    ]
 </span></code></pre></div>
-Focus on testable methods. In this case the simple routing methods are ignored and the focus is mainly 
-on the build_polygons method. There is also a test for one database access method to demonstrate how
-to mock data so that you dont rely on real and changing data for testing. E.g.:
+Focus on testable methods. In this case the simple routing methods are ignored and the focus is mainly
+on the build_polygons method. There are also tests for a database access method to demonstrate how
+to mock data so that you don't rely on real and changing data for testing. E.g.:
 <div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>@patch(&quot;gis_intro_rcaas_rse.app.mongo&quot;)
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>def test_retrieve_site_names(mock_mongo: MagicMock) -&gt; None:
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    &quot;&quot;&quot;Test that retrieve_site_names returns a unique list of site names
@@ -608,6 +609,38 @@ to mock data so that you dont rely on real and changing data for testing. E.g.:
 </span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    result = retrieve_site_names()
 </span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
 </span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    assert result == [&quot;Site A&quot;, &quot;Site B&quot;]
+</span></code></pre></div>
+And also tests to handle the addition of data via forms. E.g.:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>@patch(&quot;gis_intro_rcaas_rse.app.mongo&quot;)
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>@patch(&quot;gis_intro_rcaas_rse.app.retrieve_sites&quot;)
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>def test_addbothy(
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    mock_retrieve_sites: MagicMock, mock_mongo: MagicMock, client: FlaskClient
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>) -&gt; None:
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    mock_retrieve_sites.return_value = []
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    response = client.post(
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>        &quot;/addbothy&quot;,
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>        data={
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>            &quot;Longitude&quot;: &quot;-4.1&quot;,
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>            &quot;Latitude&quot;: &quot;56.2&quot;,
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>            &quot;BothyName&quot;: &quot;Test Bothy&quot;,
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>        },
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    )
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    assert response.status_code == 200
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>    mock_mongo.db.bothies.insert_one.assert_called_once_with(
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>        {
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>            &quot;type&quot;: &quot;Feature&quot;,
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>            &quot;geometry&quot;: {
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>                &quot;type&quot;: &quot;Point&quot;,
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>                &quot;coordinates&quot;: [-4.1, 56.2],
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>            },
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>            &quot;properties&quot;: {
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>                &quot;name&quot;: &quot;Test Bothy&quot;,
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>            },
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>        }
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>    )
 </span></code></pre></div></p>
 <h2 id="formatting-html">Formatting HTML</h2>
 <p>To format an html page open it, place the cursor at the template start and execute 'option shift F'.
@@ -664,22 +697,22 @@ select the default navigation, Desktop, and all four categeories and click the A
 multiple points at the same location such as a recording site with multiple sensors each recording a datastream, or multiple samples that
 are collected at the same location. Leaflet will not handle this by default but with the Leaflet markercluster plugin this can be handled.
 The following imports need to be in the <code>&lt;head&gt;</code> section</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css&quot; /&gt;
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css&quot; /&gt;
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    &lt;script src=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js&quot;&gt;&lt;/script&gt;
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css&quot; /&gt;
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css&quot; /&gt;
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    &lt;script src=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js&quot;&gt;&lt;/script&gt;
 </span></code></pre></div>
 <p>You also need to declare a marker cluster variable and add each marker to it:</p>
-<p><div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>        var markers = L.markerClusterGroup();
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>        const bothyLayer = L.geoJSON(geojson, {
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>            onEachFeature,
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>            pointToLayer(feature, latlng) {
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                return L.marker(latlng, {
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                    icon: customIcon,
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                    alt: feature.properties.name
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                });
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>            }
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>        }).addTo(markers);
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>        markers.addTo(map);
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>        var markers = L.markerClusterGroup();
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>        const bothyLayer = L.geoJSON(geojson, {
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>            onEachFeature,
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>            pointToLayer(feature, latlng) {
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>                return L.marker(latlng, {
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>                    icon: customIcon,
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>                    alt: feature.properties.name
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>                });
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>            }
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>        }).addTo(markers);
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>        markers.addTo(map);
 </span></code></pre></div>
 <img alt="marker cluster" src="../images/markerCluster.png" />
 <img alt="marker cluster expanded" src="../images/markerClusterExpanded.png" /></p>
