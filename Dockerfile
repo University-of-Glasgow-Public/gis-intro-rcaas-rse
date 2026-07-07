@@ -9,7 +9,7 @@ WORKDIR /app
 RUN pip install uv
 
 # Copy dependency files first (for caching)
-COPY pyproject.toml uv.lock ./
+COPY pyproject.toml uv.lock README.md ./
 
 # Install dependencies (reproducible)
 RUN uv sync --frozen
@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 5000
 
 # Run with gunicorn
-CMD ["uv", "run", "gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+CMD ["uv", "run", "gunicorn", "-b", "0.0.0.0:5000", "gis_intro_rcaas_rse.app:app"]

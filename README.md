@@ -19,4 +19,4 @@ To build and start the application locally:
 docker compose up --build
 ```
 
-One started, the application should be available on http://localhost:8000/results
+Once started, the application should be available on http://localhost:8000/results
