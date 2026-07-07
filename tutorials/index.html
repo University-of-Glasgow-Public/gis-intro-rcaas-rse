@@ -395,58 +395,58 @@
   <h1>Tutorials</h1>
 
 <h2 id="developing-the-main-application">Developing the main application</h2>
-<p>Whilst you could just clone the repository, or browse the content, it is often a more rich experience 
-if you go through the process as if you were developing your own web site, and this tutorial adopts 
+<p>Whilst you could just clone the repository, or browse the content, it is often a more rich experience
+if you go through the process as if you were developing your own web site, and this tutorial adopts
 that pedagogical approach.</p>
-<p>This guide assumes you are using UV to manage your environment and Visual Studio Code as an IDE 
-and will tie in with the GIS tutorial on Leaflet and MongoDB and will demonstrate how to use python 
-to access MongoDB and create dynamic map content. We will use flask to facilitate creating the web 
-pages and flask-pymongo to bridge between Flask and MongoDB. It does not cover the insallation of VS 
+<p>This guide assumes you are using UV to manage your environment and Visual Studio Code as an IDE
+and will tie in with the GIS tutorial on Leaflet and MongoDB and will demonstrate how to use python
+to access MongoDB and create dynamic map content. We will use flask to facilitate creating the web
+pages and flask-pymongo to bridge between Flask and MongoDB. It does not cover the insallation of VS
 code or UV as there are plenty of guides online already.</p>
-<p>Flask-pymongo has methods that are identically or similarly named to the ones covered in the 
+<p>Flask-pymongo has methods that are identically or similarly named to the ones covered in the
 MongoDB-Leaflet tutorial. For example, find in MongoDB has an identically named method in flask-pymongo.
-The findOne method in MongoDB has a similarly named method find_one in flask-pymongo. When using 
-flask-pymongo query methods the query string needs to be formatted slightly differently, such as 
-wrapping $nearSphere in double quotes. Another difference is the return type. Whilst MongoDB findOne 
-queries return a JSON document, pymongo find_one returns that same document as a data dictionary. 
-This difference needs to be accounted for with a json conversion when returning results to the web page 
+The findOne method in MongoDB has a similarly named method find_one in flask-pymongo. When using
+flask-pymongo query methods the query string needs to be formatted slightly differently, such as
+wrapping $nearSphere in double quotes. Another difference is the return type. Whilst MongoDB findOne
+queries return a JSON document, pymongo find_one returns that same document as a data dictionary.
+This difference needs to be accounted for with a json conversion when returning results to the web page
 script element controlling presentation of those data on a map.</p>
-<p>Start VS code on your laptop and open a terminal (ctrl shift ` or select New Terminal in the Terminal 
-menubar item) and change directory to the root of your usual coding project workspace and execute 
+<p>Start VS code on your laptop and open a terminal (ctrl shift ` or select New Terminal in the Terminal
+menubar item) and change directory to the root of your usual coding project workspace and execute
 uv init [project name] to set up the core project content and navigate to the new project folder. E.g.,</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cd /Users/bob.mcfadden/VscodeProjects
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uv init bothy
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cd bothy
 </span></code></pre></div>
-<p>The BOTHY folder should contain: 
-* .gitignore, 
-* .python-version, 
-* main.py, 
+<p>The BOTHY folder should contain:
+* .gitignore,
+* .python-version,
+* main.py,
 * project.toml (with no dependencies specified as yet, requires-python set to “&gt;=3.13” and some metadata),
-* README.md. 
-Rename main.py to app.py by right clicking on the file in EXPLORER and selecting Rename... 
-Execute uv venv to create your virtual environment and source .venv/bin/activate to activate it. 
+* README.md.
+Rename main.py to app.py by right clicking on the file in EXPLORER and selecting Rename...
+Execute uv venv to create your virtual environment and source .venv/bin/activate to activate it.
 When you revisit the project after working on another project or the next day you may need to run the activate step again.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uv venv
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>source .venv/bin/activate
 </span></code></pre></div>
-<p>The BOTHY folder should now have a .venv folder with 
+<p>The BOTHY folder should now have a .venv folder with
 * bin folder,
-* lib folder, 
-* .gitignore, 
-* CACHEDIR.TAG, 
-* pyenv.cfg files. </p>
+* lib folder,
+* .gitignore,
+* CACHEDIR.TAG,
+* pyenv.cfg files.</p>
 <p>Next we will add the libraries that we need.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv add flask 
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>uv add flask-pymongo 
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv add flask
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>uv add flask-pymongo
 </span></code></pre></div>
-<p>This will specify the necessary dependencies in the dependencies array in the toml file and add flask 
+<p>This will specify the necessary dependencies in the dependencies array in the toml file and add flask
 and flask-pymongo and their dependencies to the lib folder in your virtual environment.</p>
-<p>Copy the contents of app.py file from GitHub into your app.py file, overwriting any of the default content. 
-This file represents the Controller in the Model View Controller architecture (MVC). It is brokering various requests and returning responses; controlling the flow of the application. In this very simple application the model can be viewed as the database and the data dictionaries that map to the documents in the collections. PyMongo 
-does not do models in the sense of clasic Object Relational Mapping (ORM) tools such as Hibernate. If this is important then you may want to consider mongoengine as an alternative. The view elements are the template files. </p>
+<p>Copy the contents of app.py file from GitHub into your app.py file, overwriting any of the default content.
+This file represents the Controller in the Model View Controller architecture (MVC). It is brokering various requests and returning responses; controlling the flow of the application. In this very simple application the model can be viewed as the database and the data dictionaries that map to the documents in the collections. PyMongo
+does not do models in the sense of clasic Object Relational Mapping (ORM) tools such as Hibernate. If this is important then you may want to consider mongoengine as an alternative. The view elements are the template files.</p>
 <p>The search function will be called when the application’s search directory '/search' is visited.
-This is specified with the app.route annotation. It will return a basic search form that we will 
+This is specified with the app.route annotation. It will return a basic search form that we will
 use to find bothies and present them on a map.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>@app.route(&#39;/search&#39;, methods=[&#39;GET&#39;])
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>def search():
@@ -457,7 +457,7 @@ use to find bothies and present them on a map.</p>
 <p>Create a templates directory in the root of the project filder and within it a new search.html file.
 Copy the contents of search.html file from GitHub into the blank new file. While you are at it create base,
 addbothy, addsite and bothies.html</p>
-<p>The results method is called as a result of the form specification in search.html (using HTTP POST) using 
+<p>The results method is called as a result of the form specification in search.html (using HTTP POST) using
 constraints specified in the form as well as directly from a URL with no constraints (using HTTP GET).</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>&lt;form action=&quot;http://127.0.0.1:5000/results&quot; method=&quot;POST&quot;&gt;
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
@@ -465,13 +465,13 @@ constraints specified in the form as well as directly from a URL with no constra
 </span></code></pre></div>
 <p>The method is sensitive to the request method. If the request method is POST then the method checks which
 of the three search types was made. If the Name field is not null then at most only one bothy is returned
-based on the unique name field. The <code>{"_id": 0}</code> argument means that the native primary key field is not 
+based on the unique name field. The <code>{"_id": 0}</code> argument means that the native primary key field is not
 returned. If neither Name nor searching in a circle conditions are met then the assumption is the user is
 searching by site as long as an option other than site_unselected has been selected. Step one is to find
-the site by name and use the geometry of that site in step two to define the geoWithin search. If the 
+the site by name and use the geometry of that site in step two to define the geoWithin search. If the
 request method is GET then the method will retun all bothies in the collection (without their primary keys).
 Lastly all sites are retrieved so that they can be rendered on the map and the method returns the user to
-bothies.html along with the bothy and site data and any search by circle specifications so that the bounding 
+bothies.html along with the bothy and site data and any search by circle specifications so that the bounding
 circle can be plotted on the map.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>@app.route(&#39;/results&#39;, methods=[&#39;POST&#39;, &#39;GET&#39;])
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>def results():
@@ -533,13 +533,13 @@ annotations and return form pages addbothy and addsite.html respectively.</p>
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    &quot;&quot;&quot;Return and add site map and form.&quot;&quot;&quot;
 </span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    return render_template(&#39;addsite.html&#39;)
 </span></code></pre></div>
-<p>The addbothy method responds to the submission 
+<p>The addbothy method responds to the submission
 <div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>@app.route(&#39;/addbothy&#39;, methods=[&#39;POST&#39;])
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>def addbothy():
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    &quot;&quot;&quot;Creates a new bothy document. 
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    &quot;&quot;&quot;Creates a new bothy document.
 </span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    Processes the bothy form and creates a new bothy representation as a dictionary, 
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    inserts the new record and returns the  map page with all bothies and sites.  
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    Processes the bothy form and creates a new bothy representation as a dictionary,
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    inserts the new record and returns the  map page with all bothies and sites.
 </span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    N.B. Form validation is non existent. Consider wtf forms.
 </span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    &quot;&quot;&quot;
 </span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    result = request.form
@@ -563,7 +563,7 @@ annotations and return form pages addbothy and addsite.html respectively.</p>
 <p>If you have an issue with the flask import this may be resolved by changing the interpreter to the one in your environment
 by opening the Command Palette(cmd+shift+p on mac or ctrl+shift+p on windows) and selecting the Python: Select Interpreter
 and then selecting the one in the .venv in the BOTHY folder.</p>
-<p>Create a templates folder in the project root directory and within it add the following pages, copying content direct from 
+<p>Create a templates folder in the project root directory and within it add the following pages, copying content direct from
 the matching file in the templates folder of this repository:
 * base.html
 * view.html
