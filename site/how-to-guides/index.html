@@ -279,6 +279,17 @@
 </li>
 
         <li class="md-nav__item">
+  <a href="#running-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+
+        Running unit tests
+
+    </span>
+  </a>
+
+</li>
+
+        <li class="md-nav__item">
   <a href="#formatting-html" class="md-nav__link">
     <span class="md-ellipsis">
 
@@ -442,6 +453,17 @@
 </li>
 
         <li class="md-nav__item">
+  <a href="#running-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+
+        Running unit tests
+
+    </span>
+  </a>
+
+</li>
+
+        <li class="md-nav__item">
   <a href="#formatting-html" class="md-nav__link">
     <span class="md-ellipsis">
 
@@ -529,6 +551,64 @@
 <h2 id="mkdocs">MkDocs</h2>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mkdocs gh-deploy
 </span></code></pre></div>
+<h2 id="running-unit-tests">Running unit tests</h2>
+<p>The code uses pytest to unit test code and pytest-cov to assess code coverage. These were added as part of
+a general setup including ruff (for formatting and linting) and mypy (for static typing)</p>
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># To add pytest and pytest-cov alonfg with other dev dependencies
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv add --dev pre-commit ruff mypy pytest pytest-cov
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a># To run tests (once you have written them)
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>uv run pytest
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a># To run tests with coverage (once you have written them)
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>uv run pytest --cov=gis_intro_rcaas_rse
+</span></code></pre></div>
+Tests should be placed in a tests folder with files named with the prefix test_ and the name of
+the file being tested. E.g. to test app.p in src/gis_intro_rcaas_rse create a file called
+test_app.py in the tests folder. E.g.
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>from unittest.mock import MagicMock, patch
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>import pytest
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>from gis_intro_rcaas_rse.app import build_polygon, retrieve_site_names
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>def test_build_polygon_closes_open_polygon_trailing_comma() -&gt; None:
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    &quot;&quot;&quot;Test that build_polygon closes an open polygon when the
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    first and last points are not the same, and a trailing comma is present.&quot;&quot;&quot;
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    result = build_polygon(
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>        &quot;1,2,3,&quot;,
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        &quot;4,5,6,&quot;,
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    )
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    assert result == [
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>        [1.0, 4.0],
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>        [2.0, 5.0],
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        [3.0, 6.0],
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        [1.0, 4.0],
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    ]
+</span></code></pre></div>
+Focus on testable methods. In this case the simple routing methods are ignored and the focus is mainly
+on the build_polygons method. There is also a test for one database access method to demonstrate how
+to mock data so that you dont rely on real and changing data for testing. E.g.:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>@patch(&quot;gis_intro_rcaas_rse.app.mongo&quot;)
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>def test_retrieve_site_names(mock_mongo: MagicMock) -&gt; None:
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    &quot;&quot;&quot;Test that retrieve_site_names returns a unique list of site names
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    excluding any empty names.&quot;&quot;&quot;
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    mock_mongo.db.sites.find.return_value = [
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        {&quot;properties&quot;: {&quot;name&quot;: &quot;Site A&quot;}},  # Valid site with name
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        {&quot;properties&quot;: {&quot;name&quot;: &quot;Site B&quot;}},  # Valid site with name
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        {&quot;properties&quot;: {&quot;description&quot;: &quot;Site C&quot;}},  # No name field
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        {&quot;properties&quot;: {&quot;name&quot;: &quot;&quot;}},  # Empty name field
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        {&quot;properties&quot;: {}},  # No name field
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        {},  # No properties field
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    ]
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    result = retrieve_site_names()
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    assert result == [&quot;Site A&quot;, &quot;Site B&quot;]
+</span></code></pre></div></p>
 <h2 id="formatting-html">Formatting HTML</h2>
 <p>To format an html page open it, place the cursor at the template start and execute 'option shift F'.
 This will:</p>
@@ -542,7 +622,7 @@ and the close body and the close html tag.</li>
 <p><a href="https://webaim.org/resources/contrastchecker/">Contrast Checker</a></p>
 <p>To determine the colours on a page that are not defined in the template file, use the Chrome Color Picker extension.</p>
 <h2 id="achieving-wcag-level-aa-accesibility-for-maps">Achieving WCAG level AA accesibility for maps</h2>
-<p>Maps present a challenge to meeting WCAG level AA criteria, particularly around contrast between regions of background maps. ESRI provide a specialized, worldwide basemap designed with high contrast and colour-vision-deficient-safe colours. This guide does not cover utilisation of that base map but consideration of the use of that map is encouraged, along with thinking about how else the data portreyed on a map can be alternatively presented, e.g., as tabular data. In developing this guide the following items were implemented to improve on accessibility: </p>
+<p>Maps present a challenge to meeting WCAG level AA criteria, particularly around contrast between regions of background maps. ESRI provide a specialized, worldwide basemap designed with high contrast and colour-vision-deficient-safe colours. This guide does not cover utilisation of that base map but consideration of the use of that map is encouraged, along with thinking about how else the data portreyed on a map can be alternatively presented, e.g., as tabular data. In developing this guide the following items were implemented to improve on accessibility:</p>
 <ol>
 <li>Inclusion of a dark border around the map to improve the contrast ratio of a map.</li>
 <li>Use of image-based point markers (rather than SVG) that facilitate inclusion of an alt tag.</li>
@@ -565,7 +645,7 @@ but we think that is incorrect.</li>
 <li>Form fields have <code>&lt;label&gt;</code> tags.</li>
 <li>Related form content is wrapped in a <code>&lt;fieldset&gt;</code> tag with a <code>&lt;legend&gt;</code> tag.</li>
 <li>Form fields and/or groups have sufficent descriptive text nearby.</li>
-<li>Colour is not the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element, and the visual presentation of text and images of text has a contrast ratio of at least 4.5:1 (header section blue and white contrast is 11.97:1). </li>
+<li>Colour is not the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element, and the visual presentation of text and images of text has a contrast ratio of at least 4.5:1 (header section blue and white contrast is 11.97:1).</li>
 <li>The map has sufficient contrast to the background if no border is present or to the border if a border is present.</li>
 <li>All layers added to the map have sufficient 3:1 constrast ratio with the background map.</li>
 <li>Markers on the map have an alt tag and can be tabbed through.</li>
@@ -584,22 +664,22 @@ select the default navigation, Desktop, and all four categeories and click the A
 multiple points at the same location such as a recording site with multiple sensors each recording a datastream, or multiple samples that
 are collected at the same location. Leaflet will not handle this by default but with the Leaflet markercluster plugin this can be handled.
 The following imports need to be in the <code>&lt;head&gt;</code> section</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css&quot; /&gt;
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css&quot; /&gt;
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    &lt;script src=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js&quot;&gt;&lt;/script&gt;
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css&quot; /&gt;
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css&quot; /&gt;
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    &lt;script src=&quot;https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js&quot;&gt;&lt;/script&gt;
 </span></code></pre></div>
 <p>You also need to declare a marker cluster variable and add each marker to it:</p>
-<p><div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>        var markers = L.markerClusterGroup();
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>        const bothyLayer = L.geoJSON(geojson, {
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>            onEachFeature,
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>            pointToLayer(feature, latlng) {
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>                return L.marker(latlng, {
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>                    icon: customIcon,
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>                    alt: feature.properties.name
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>                });
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>            }
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        }).addTo(markers);
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>        markers.addTo(map);
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>        var markers = L.markerClusterGroup();
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>        const bothyLayer = L.geoJSON(geojson, {
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>            onEachFeature,
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>            pointToLayer(feature, latlng) {
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                return L.marker(latlng, {
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                    icon: customIcon,
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                    alt: feature.properties.name
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                });
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>            }
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>        }).addTo(markers);
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>        markers.addTo(map);
 </span></code></pre></div>
 <img alt="marker cluster" src="../images/markerCluster.png" />
 <img alt="marker cluster expanded" src="../images/markerClusterExpanded.png" /></p>

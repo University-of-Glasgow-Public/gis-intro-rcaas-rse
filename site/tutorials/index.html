@@ -435,7 +435,7 @@ When you revisit the project after working on another project or the next day yo
 * lib folder,
 * .gitignore,
 * CACHEDIR.TAG,
-* pyenv.cfg files. </p>
+* pyenv.cfg files.</p>
 <p>Next we will add the libraries that we need.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv add flask
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>uv add flask-pymongo
@@ -444,7 +444,7 @@ When you revisit the project after working on another project or the next day yo
 and flask-pymongo and their dependencies to the lib folder in your virtual environment.</p>
 <p>Copy the contents of app.py file from GitHub into your app.py file, overwriting any of the default content.
 This file represents the Controller in the Model View Controller architecture (MVC). It is brokering various requests and returning responses; controlling the flow of the application. In this very simple application the model can be viewed as the database and the data dictionaries that map to the documents in the collections. PyMongo
-does not do models in the sense of clasic Object Relational Mapping (ORM) tools such as Hibernate. If this is important then you may want to consider mongoengine as an alternative. The view elements are the template files. </p>
+does not do models in the sense of clasic Object Relational Mapping (ORM) tools such as Hibernate. If this is important then you may want to consider mongoengine as an alternative. The view elements are the template files.</p>
 <p>The search function will be called when the application’s search directory '/search' is visited.
 This is specified with the app.route annotation. It will return a basic search form that we will
 use to find bothies and present them on a map.</p>

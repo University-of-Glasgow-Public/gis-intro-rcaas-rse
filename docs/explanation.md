@@ -5,8 +5,10 @@ This repository was created to address a number of goals:
 2. Showcase the use of Leaflet and MongoDB.
 3. Illustrate how to document the code base and generate project documentation with MkDocs.
 4. Illustrate how to add copyright and license information.
-5. Illustrate how to add metadata (TODO)
+5. Illustrate how to add metadata using CITATION.cff
 6. Illustrate WCAG level AA compliance.
+7. Illustrate use of docker.
+8. Illustrate setup using ruff for linting and formatting, mypy for static typing and pre-commit.
 
 This is a work in progress. It is not perfect but hopefully of sufficient quality to be of use
 if you are looking for guidance in any of these areas.

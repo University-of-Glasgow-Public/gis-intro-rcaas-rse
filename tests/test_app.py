@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+from flask.testing import FlaskClient
 
 from gis_intro_rcaas_rse.app import build_polygon, retrieve_site_names
 
@@ -114,3 +115,52 @@ def test_retrieve_site_names(mock_mongo: MagicMock) -> None:
     result = retrieve_site_names()
 
     assert result == ["Site A", "Site B"]
+
+
+@patch("gis_intro_rcaas_rse.app.retrieve_site_names")
+def test_search_route(mock_retrieve_site_names: MagicMock, client: FlaskClient) -> None:
+    mock_retrieve_site_names.return_value = [
+        "Site A",
+        "Site B",
+    ]
+
+    response = client.get("/search")
+
+    assert response.status_code == 200
+
+    data = response.get_data(as_text=True)
+
+    assert "Site A" in data
+    assert "Site B" in data
+
+
+@patch("gis_intro_rcaas_rse.app.mongo")
+@patch("gis_intro_rcaas_rse.app.retrieve_sites")
+def test_addbothy(
+    mock_retrieve_sites: MagicMock, mock_mongo: MagicMock, client: FlaskClient
+) -> None:
+    mock_retrieve_sites.return_value = []
+
+    response = client.post(
+        "/addbothy",
+        data={
+            "Longitude": "-4.1",
+            "Latitude": "56.2",
+            "BothyName": "Test Bothy",
+        },
+    )
+
+    assert response.status_code == 200
+
+    mock_mongo.db.bothies.insert_one.assert_called_once_with(
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-4.1, 56.2],
+            },
+            "properties": {
+                "name": "Test Bothy",
+            },
+        }
+    )

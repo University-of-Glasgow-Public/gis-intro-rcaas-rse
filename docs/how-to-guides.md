@@ -3,6 +3,102 @@
 mkdocs gh-deploy
 ```
 
+## Running unit tests
+
+The code uses pytest to unit test code and pytest-cov to assess code coverage. These were added as part of
+a general setup including ruff (for formatting and linting), mypy (for static typing), and precommit. N.B.,
+Testing is currently not incorporated into the pre-commit process and requires a manual execution as shown
+below:
+```
+# To add pytest and pytest-cov alonfg with other dev dependencies
+uv add --dev pre-commit ruff mypy pytest pytest-cov
+
+# To run tests (once you have written them)
+uv run pytest
+
+# To run tests with coverage (once you have written them)
+uv run pytest --cov=gis_intro_rcaas_rse
+```
+Tests should be placed in a tests folder with files named with the prefix test_ and the name of
+the file being tested. E.g. to test app.py in src/gis_intro_rcaas_rse create a file called
+test_app.py in the tests folder. E.g.
+```
+from unittest.mock import MagicMock, patch
+
+import pytest
+
+from gis_intro_rcaas_rse.app import build_polygon, retrieve_site_names
+
+
+def test_build_polygon_closes_open_polygon_trailing_comma() -> None:
+    """Test that build_polygon closes an open polygon when the
+    first and last points are not the same, and a trailing comma is present."""
+    result = build_polygon(
+        "1,2,3,",
+        "4,5,6,",
+    )
+
+    assert result == [
+        [1.0, 4.0],
+        [2.0, 5.0],
+        [3.0, 6.0],
+        [1.0, 4.0],
+    ]
+```
+Focus on testable methods. In this case the simple routing methods are ignored and the focus is mainly
+on the build_polygons method. There are also tests for a database access method to demonstrate how
+to mock data so that you don't rely on real and changing data for testing. E.g.:
+```
+@patch("gis_intro_rcaas_rse.app.mongo")
+def test_retrieve_site_names(mock_mongo: MagicMock) -> None:
+    """Test that retrieve_site_names returns a unique list of site names
+    excluding any empty names."""
+    mock_mongo.db.sites.find.return_value = [
+        {"properties": {"name": "Site A"}},  # Valid site with name
+        {"properties": {"name": "Site B"}},  # Valid site with name
+        {"properties": {"description": "Site C"}},  # No name field
+        {"properties": {"name": ""}},  # Empty name field
+        {"properties": {}},  # No name field
+        {},  # No properties field
+    ]
+
+    result = retrieve_site_names()
+
+    assert result == ["Site A", "Site B"]
+```
+And also tests to handle the addition of data via forms. E.g.:
+```
+@patch("gis_intro_rcaas_rse.app.mongo")
+@patch("gis_intro_rcaas_rse.app.retrieve_sites")
+def test_addbothy(
+    mock_retrieve_sites: MagicMock, mock_mongo: MagicMock, client: FlaskClient
+) -> None:
+    mock_retrieve_sites.return_value = []
+
+    response = client.post(
+        "/addbothy",
+        data={
+            "Longitude": "-4.1",
+            "Latitude": "56.2",
+            "BothyName": "Test Bothy",
+        },
+    )
+
+    assert response.status_code == 200
+
+    mock_mongo.db.bothies.insert_one.assert_called_once_with(
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-4.1, 56.2],
+            },
+            "properties": {
+                "name": "Test Bothy",
+            },
+        }
+    )
+```
 ## Formatting HTML
 
 To format an html page open it, place the cursor at the template start and execute 'option shift F'.
