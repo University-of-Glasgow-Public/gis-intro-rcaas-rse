@@ -10,6 +10,7 @@ Licensed under the BSD 3-Clause License
 """
 
 import os
+from typing import Any
 
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
@@ -17,22 +18,21 @@ from flask_pymongo import PyMongo
 app = Flask(__name__)
 
 # Use environment variable (Docker will override this)
-app.config["MONGO_URI"] = os.getenv(
-    "MONGO_URI", "mongodb://127.0.0.1:27017/cocdb")
+app.config["MONGO_URI"] = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017/cocdb")
 
 # Initialize PyMongo
 mongo = PyMongo(app)
 
 
 @app.route("/search", methods=["GET"])
-def search():
+def search() -> str:
     """Returns the search form page with a dropdown of site names to search within."""
     sites = retrieve_site_names()
     return render_template("search.html", sites=sites)
 
 
 @app.route("/results", methods=["POST", "GET"])
-def results():
+def results() -> str:
     """Returns a map of bothies and sites.
 
     POST: Process the search form and return a page with a map
@@ -49,19 +49,19 @@ def results():
     result = request.form
     longitude = 0.0
     latitude = 0.0
-    radius = 0
+    radius = 0.0
+    db = mongo.db
+    assert db is not None
     if request.method == "POST":
         # User is searching by name
         if result["Name"]:
-            data = mongo.db.bothies.find_one(
-                {"properties.name": result["Name"]}, {"_id": 0}
-            )
+            data = db.bothies.find_one({"properties.name": result["Name"]}, {"_id": 0})
         # User is searching within a circle
         elif result["Longitude"] and result["Latitude"] and result["Radius"]:
             longitude = float(result["Longitude"])
             latitude = float(result["Latitude"])
             radius = float(result["Radius"])
-            data = mongo.db.bothies.find(
+            data = db.bothies.find(
                 {
                     "geometry": {
                         "$nearSphere": {
@@ -78,17 +78,17 @@ def results():
         # User is searching within a site
         elif result["Site"] != "site_unselected":
             # Find the site document by name
-            site = mongo.db.sites.find_one({"properties.name": result["Site"]})
+            site = db.sites.find_one({"properties.name": result["Site"]})
             # Use the geometry property of the site to specify
             # the region in which to search
-            data = mongo.db.bothies.find(
+            data = db.bothies.find(
                 {"geometry": {"$geoWithin": {"$geometry": site["geometry"]}}},
                 {"_id": 0},
             )
 
     if request.method == "GET":
         # Find all but dont include the id field
-        data = mongo.db.bothies.find({}, {"_id": 0})
+        data = db.bothies.find({}, {"_id": 0})
 
     sites = retrieve_sites()
     return render_template(
@@ -102,13 +102,13 @@ def results():
 
 
 @app.route("/bothyform", methods=["GET"])
-def bothyform():
+def bothyform() -> str:
     """Return a page with a map and form."""
     return render_template("addbothy.html")
 
 
 @app.route("/addbothy", methods=["POST"])
-def addbothy():
+def addbothy() -> str:
     """Creates a new bothy document.
 
     Processes the bothy form and creates a new bothy representation as a dictionary,
@@ -124,10 +124,15 @@ def addbothy():
         "geometry": {"type": "Point", "coordinates": [longitude, latitude]},
         "properties": {"name": name},
     }
+    db = mongo.db
+
+    if db is None:
+        raise RuntimeError("MongoDB has not been initialized")
+
     # Add the new bothy to the bothy collection
-    mongo.db.bothies.insert_one(new_bothy)
+    db.bothies.insert_one(new_bothy)
     # Find all bothies, including the new one, excluding the id field
-    data = mongo.db.bothies.find({}, {"_id": 0})
+    data = db.bothies.find({}, {"_id": 0})
     # Find all sites
     sites = retrieve_sites()
     return render_template(
@@ -136,13 +141,13 @@ def addbothy():
 
 
 @app.route("/siteform", methods=["GET"])
-def siteform():
+def siteform() -> str:
     """Return and add site map and form."""
     return render_template("addsite.html")
 
 
 @app.route("/addsite", methods=["POST"])
-def addsite():
+def addsite() -> str:
     """Creates a new site document.
 
     Processes the site form and creates a new site representation
@@ -160,10 +165,13 @@ def addsite():
         "geometry": {"type": "Polygon", "coordinates": polygon},
         "properties": {"name": name},
     }
+    db = mongo.db
+    if db is None:
+        raise RuntimeError("MongoDB has not been initialized")
     # Add the new site to the sites collection
-    mongo.db.sites.insert_one(site)
+    db.sites.insert_one(site)
     # Find all bothies excluding the id field
-    data = mongo.db.bothies.find({}, {"_id": 0})
+    data = db.bothies.find({}, {"_id": 0})
     # Find all sites, including the new one
     sites = retrieve_sites()
     return render_template(
@@ -171,7 +179,7 @@ def addsite():
     )
 
 
-def build_polygon(longitude, latitude):
+def build_polygon(longitude: str, latitude: str) -> list[list[float]]:
     """Converts a string of longitudes and latitudes to a polygon specification.
 
     :param longitude: a csv string of longitudes for all points specified
@@ -182,7 +190,6 @@ def build_polygon(longitude, latitude):
     at the start and end (i.e., polygon may not be closed off)
 
     :return: an array of point arrays defining the polygon
-    :rtype: Array
     """
     # strip trailing comma and split into array of coordinate strings
     longitude_split = longitude.rstrip(",").split(",")
@@ -200,7 +207,7 @@ def build_polygon(longitude, latitude):
     # if end point != start point, start point is duplicated to ensure a valid polygon.
     if (
         longitude_split[0] != longitude_split[-1]
-        and latitude_split[0] != latitude_split[-1]
+        or latitude_split[0] != latitude_split[-1]
     ):
         longitude_split.append(longitude_split[0])
         latitude_split.append(latitude_split[0])
@@ -213,16 +220,18 @@ def build_polygon(longitude, latitude):
     return polygon_coords
 
 
-def retrieve_site_names():
+def retrieve_site_names() -> list[str]:
     """returns a list of site names.
 
     Finds all the site documents with just the property name field
     key and value and pulls out the property name field value.
 
     :return: a unique list of site names excluding any empty names
-    :rtype: Array
     """
-    sites = mongo.db.sites.find({}, {"_id": 0, "properties.name": 1})
+    db = mongo.db
+    if db is None:
+        raise RuntimeError("MongoDB has not been initialized")
+    sites = db.sites.find({}, {"_id": 0, "properties.name": 1})
     site_list = []
     for site in sites:
         name = site.get("properties", {}).get("name")
@@ -231,13 +240,12 @@ def retrieve_site_names():
     return site_list
 
 
-def retrieve_sites():
-    """Returns all site documents.
-
-    :return: all site documents without the id field
-    :rtype: Cursor
-    """
-    return mongo.db.sites.find({}, {"_id": 0})
+def retrieve_sites() -> list[dict[str, Any]]:
+    """Return all site documents without the _id field."""
+    db = mongo.db
+    if db is None:
+        raise RuntimeError("MongoDB has not been initialized")
+    return list(db.sites.find({}, {"_id": 0}))
 
 
 if __name__ == "__main__":

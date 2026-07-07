@@ -37,6 +37,7 @@ addopts = "-v"
 
 [tool.ruff]
 line-length = 88
+target-version = "py313"
 
 [tool.ruff.lint]
 select = [
@@ -46,6 +47,12 @@ select = [
     "UP", # pyupgrade
     "B",  # bugbear
 ]
+
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
 
 [tool.mypy]
 python_version = "3.13"

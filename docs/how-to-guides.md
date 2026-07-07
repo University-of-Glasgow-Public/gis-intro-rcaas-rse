@@ -5,12 +5,12 @@ mkdocs gh-deploy
 
 ## Formatting HTML
 
-To format an html page open it, place the cursor at the template start and execute 'option shift F'. 
+To format an html page open it, place the cursor at the template start and execute 'option shift F'.
 This will:
 
 1. ensure no lines are too long,
 2. ensure HTML is properly indented,
-3. insert a blank line between the open html and open head tag, the close head and open body tag 
+3. insert a blank line between the open html and open head tag, the close head and open body tag
 and the close body and the close html tag.
 
 ## Checking contrast
@@ -21,7 +21,7 @@ To determine the colours on a page that are not defined in the template file, us
 
 ## Achieving WCAG level AA accesibility for maps
 
-Maps present a challenge to meeting WCAG level AA criteria, particularly around contrast between regions of background maps. ESRI provide a specialized, worldwide basemap designed with high contrast and colour-vision-deficient-safe colours. This guide does not cover utilisation of that base map but consideration of the use of that map is encouraged, along with thinking about how else the data portreyed on a map can be alternatively presented, e.g., as tabular data. In developing this guide the following items were implemented to improve on accessibility: 
+Maps present a challenge to meeting WCAG level AA criteria, particularly around contrast between regions of background maps. ESRI provide a specialized, worldwide basemap designed with high contrast and colour-vision-deficient-safe colours. This guide does not cover utilisation of that base map but consideration of the use of that map is encouraged, along with thinking about how else the data portreyed on a map can be alternatively presented, e.g., as tabular data. In developing this guide the following items were implemented to improve on accessibility:
 
 1. Inclusion of a dark border around the map to improve the contrast ratio of a map.
 2. Use of image-based point markers (rather than SVG) that facilitate inclusion of an alt tag.
@@ -44,7 +44,7 @@ but we think that is incorrect.
 10. Form fields have `<label>` tags.
 11. Related form content is wrapped in a `<fieldset>` tag with a `<legend>` tag.
 12. Form fields and/or groups have sufficent descriptive text nearby.
-13. Colour is not the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element, and the visual presentation of text and images of text has a contrast ratio of at least 4.5:1 (header section blue and white contrast is 11.97:1). 
+13. Colour is not the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element, and the visual presentation of text and images of text has a contrast ratio of at least 4.5:1 (header section blue and white contrast is 11.97:1).
 14. The map has sufficient contrast to the background if no border is present or to the border if a border is present.
 15. All layers added to the map have sufficient 3:1 constrast ratio with the background map.
 16. Markers on the map have an alt tag and can be tabbed through.
@@ -54,7 +54,7 @@ but we think that is incorrect.
 
 1. Tab through the site (i.e., without using the mouse) to check the order is natural and all items can be accessed.
 2. Use a screen reader to access the site.
-3. In Chrome, select View / Developer / Developer Tools. In the right hand pane select the Lighthouse tab, 
+3. In Chrome, select View / Developer / Developer Tools. In the right hand pane select the Lighthouse tab,
 select the default navigation, Desktop, and all four categeories and click the Analyse page load button.
 
 ![lighthouse report](images/lighthouseReport.png)
@@ -89,6 +89,3 @@ You also need to declare a marker cluster variable and add each marker to it:
 ```
 ![marker cluster](images/markerCluster.png)
 ![marker cluster expanded](images/markerClusterExpanded.png)
-
-
-

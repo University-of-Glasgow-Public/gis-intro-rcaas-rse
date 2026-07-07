@@ -15,8 +15,8 @@ keywords:
   - MkDocs
 abstract: >
   An introduction to GIS concepts and tools, using MongoDB and Leaflet for spatial data management
-  and visualization, and Python for data analysis. This tutorial is designed for researchers and 
-  practitioners in the field of Research Software Engineering (RSE) who are interested in learning 
+  and visualization, and Python for data analysis. This tutorial is designed for researchers and
+  practitioners in the field of Research Software Engineering (RSE) who are interested in learning
   how to work with geospatial data.
 version: 1.0.0
 date-released: 2026-06-11

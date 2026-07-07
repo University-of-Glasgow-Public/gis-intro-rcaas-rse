@@ -2,7 +2,7 @@ services:
   web:
     build: .
     ports:
-      - "5000"  
+      - "5000"
     depends_on:
       - mongo
     environment:
@@ -17,46 +17,3 @@ services:
 
 volumes:
   mongo_data:
-
-services:
-  web:
-    build: .
-    ports:
-      - "5000"  
-    depends_on:
-      - mongo
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/colorimetry_db
-    volumes:
-      - ./colorimetry/static/uploaded_images:/app/colorimetry/static/uploaded_images
-
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "8000:80"
-    depends_on:
-      - web
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./colorimetry/static:/app/colorimetry/static:ro
-
-
-  mongo:
-    image: mongo:6
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-      - ./assays.json:/data/assays.json
-    command: >
-      bash -c "
-      mongod --bind_ip_all &
-      sleep 5 &&
-      mongoimport --db colorimetry_db --collection assays --file /data/assays.json --jsonArray &&
-      wait"
-
-    environment:
-      - MONGO_INITDB_DATABASE=colorimetry_db
-
-
-
