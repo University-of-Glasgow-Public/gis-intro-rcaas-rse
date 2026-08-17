@@ -3,8 +3,9 @@
 {% block content %}
 <div class="mt-1 p-5 bg-tertiary text-black rounded">
     <h2>Add New Site</h2>
-    <h3>Click on the map to specify the site boundary or enter coordinates manually using the form:</h3>
+    <h3>tClick on the map to specify the site boundary or enter coordinates manually using the form:</h3>
     <div id="map"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
     <script type="text/javascript" src="/static/js/basemap.js"></script>
     <script type="text/javascript" src="/static/js/constructpolygon.js"></script>
     <form action="{{ url_for('addsite') }}" method="POST">
