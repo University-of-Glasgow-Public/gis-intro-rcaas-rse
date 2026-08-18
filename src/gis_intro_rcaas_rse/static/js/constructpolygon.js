@@ -3,11 +3,9 @@ poly.on('dblclick', L.DomEvent.stop).on('dblclick', poly.toggleEdit);
 
 const latlngs = []
 
-// // --- State ---
 const undoBtn = document.getElementById('undo-btn');
 const clearBtn = document.getElementById('clear-btn');
 
-// // --- Helpers ---
 function getCurrentLatLngs() {
     if (!poly || !poly.getLatLngs) {
         return [];
@@ -23,29 +21,38 @@ function updatePolygonVertexStyles(e) {
     }
 
     const firstLatLng = getCurrentLatLngs()[0];
-    const firstVertex = document.querySelectorAll('.leaflet-marker-icon.leaflet-div-icon.leaflet-vertex-icon.leaflet-zoom-animated.leaflet-interactive.leaflet-marker-draggable');
-    if (firstVertex.length > 0 && firstLatLng) {
-        firstVertex[0].classList += ' leaflet-first-vertex-icon';
+    const vertices = document.querySelectorAll('.leaflet-marker-icon.leaflet-div-icon.leaflet-vertex-icon.leaflet-zoom-animated.leaflet-interactive.leaflet-marker-draggable');
+    if (vertices.length > 0 && firstLatLng && (!e || e.type !== 'editable:vertex:dragend')) {
+        vertices[0].classList += ' leaflet-first-vertex-icon';
     }
 
     if (e && e.type === 'editable:drawing:end') {
-        if (firstVertex.length > 0) {
-            firstVertex[0].classList.remove('leaflet-first-vertex-icon');
+        if (vertices.length > 0) {
+            vertices[0].classList.remove('leaflet-first-vertex-icon');
         }
+
+        vertices.forEach((vertex, index) => {
+            vertex.classList.add('subtract-vertex');
+        })
+    } else {
+        vertices.forEach((vertex, index) => {
+            vertex.classList.remove('subtract-vertex');
+        })
     }
 }
 
 function updateCompletionNote(e) {
     const note = document.getElementById('polygon-completion-note');
-    if (!note) {
+    if (!note || (e && e.type === 'editable:vertex:dragend')) {
         return;
     }
 
     const currentLatLngs = getCurrentLatLngs();
+
     note.hidden = currentLatLngs.length < 2 || (e && e.type === 'editable:drawing:end');
 }
 
-function updateFormFieldsFromCoords() {
+function updateFormFieldsFromCoords(e) {
 
     if (!poly) {
         document.getElementById('latitude').value = '';
@@ -62,30 +69,17 @@ function updateFormFieldsFromCoords() {
 
     document.getElementById('latitude').value = lats;
     document.getElementById('longitude').value = lngs;
-    undoBtn.disabled = latlngs.length === 0;
+    //undoBtn.disabled = latlngs.length === 0;
 
-    updatePolygonVertexStyles();
-    updateCompletionNote();
+    if (!e) { 
+        return; 
+    }
+
+    if (e.type === 'editable:drawing:click' || e.type === 'editable:drawing:end') {
+        updatePolygonVertexStyles(e);
+        updateCompletionNote(e);
+    }
 }
-map.on('editable:drawing:click', updateFormFieldsFromCoords);
-
-map.on('editable:vertex:dragend', (e) => {
-    const features = e.editTools.featuresLayer.toGeoJSON().features
-    const vertices = features.map(feature => feature.geometry.coordinates[0].map(coord => L.latLng(coord[1], coord[0])));
-    const lats = vertices[0].map(latlng => latlng.lat).join(',');
-    const lngs = vertices[0].map(latlng => latlng.lng).join(',');
-    document.getElementById('latitude').value = lats;
-    document.getElementById('longitude').value = lngs;
-    updatePolygonVertexStyles();
-    updateCompletionNote();
-
-})
-
-map.on('editable:drawing:end', (e) => {
-
-    updatePolygonVertexStyles(e);
-    updateCompletionNote(e);
-});
 
 function resetAll() {
 
@@ -104,6 +98,40 @@ function resetAll() {
     updateCompletionNote();
     updatePolygonVertexStyles();
 }
+
+map.on('editable:drawing:click', (e) => {
+    undoBtn.disabled = true;
+    updateFormFieldsFromCoords(e);
+});
+
+map.on('editable:vertex:dragend', (e) => {
+    const features = e.editTools.featuresLayer.toGeoJSON().features
+    const vertices = features.map(feature => feature.geometry.coordinates[0].map(coord => L.latLng(coord[1], coord[0])));
+    const lats = vertices[0].map(latlng => latlng.lat).join(',');
+    const lngs = vertices[0].map(latlng => latlng.lng).join(',');
+    document.getElementById('latitude').value = lats;
+    document.getElementById('longitude').value = lngs;
+    updatePolygonVertexStyles(e);
+    updateCompletionNote(e);
+
+})
+
+map.on('editable:drawing:end', (e) => {
+    undoBtn.disabled = false;
+    updatePolygonVertexStyles(e);
+    updateCompletionNote(e);
+});
+
+map.on('editable:dragend', (e) => {
+     const features = e.editTools.featuresLayer.toGeoJSON().features
+    const vertices = features.map(feature => feature.geometry.coordinates[0].map(coord => L.latLng(coord[1], coord[0])));
+    const lats = vertices[0].map(latlng => latlng.lat).join(',');
+    const lngs = vertices[0].map(latlng => latlng.lng).join(',');
+    document.getElementById('latitude').value = lats;
+    document.getElementById('longitude').value = lngs;
+    updatePolygonVertexStyles(e);
+    updateCompletionNote(e);
+});
 
 undoBtn.addEventListener('click', function () {
     if (!poly) {
@@ -131,9 +159,8 @@ undoBtn.addEventListener('click', function () {
         resetAll();
     }
 
-    updateFormFieldsFromCoords();
-    updatePolygonVertexStyles();
-    updateCompletionNote();
+    updateFormFieldsFromCoords(null);
+
 });
 
 clearBtn.addEventListener('click', function () {
