@@ -11,6 +11,7 @@ Licensed under the BSD 3-Clause License
 
 import os
 from typing import Any
+from validation import NewBothy
 
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
@@ -120,6 +121,11 @@ def addbothy() -> str:
     longitude = float(result["Longitude"])
     latitude = float(result["Latitude"])
     name = result["BothyName"]
+    new_bothyform = NewBothy(result)
+    if not new_bothyform.validate():
+        print(new_bothyform.errors)
+    #print('Thalia')
+    #print(new_bothyform)
     new_bothy = {
         "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [longitude, latitude]},
