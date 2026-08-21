@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   web:
     build: .
@@ -7,13 +9,8 @@ services:
       - ./src:/app/src
     environment:
       - MONGO_URI=mongodb://mongo:27017/cocdb
-      - FLASK_ENV=development
-      - FLASK_APP=gis_intro_rcaas_rse.app:app
-      - FLASK_DEBUG=1
-      - TEMPLATES_AUTO_RELOAD=True
     depends_on:
       - mongo
-    command: uv run flask run --host=0.0.0.0 --port=5000 --reload
 
   mongo:
     image: mongo:7.0
@@ -24,3 +21,4 @@ services:
 
 volumes:
   mongo_data:
+    driver: local
