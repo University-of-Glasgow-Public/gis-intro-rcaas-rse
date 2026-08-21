@@ -29,6 +29,22 @@ fieldset {
   border-radius: 8px;
 }
 
+.leaflet-first-vertex-icon {
+  background: #2ecc71 !important;
+  border: 2px solid #1f8c4b !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9);
+}
+
+.polygon-completion-note {
+  margin: 0 20px 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #eaf8ee;
+  border: 1px solid #8ccf9c;
+  color: #1d5a2a;
+  font-size: 0.9rem;
+}
+
 .bg-blue {
   background-color: #003865;
 }
