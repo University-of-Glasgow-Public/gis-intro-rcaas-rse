@@ -19,18 +19,27 @@
                 <label for="longitude">Central Longitude:</label>
                 <div class="col-sm-10">
                     <input id="longitude" type="text" name="Longitude" />
+                    {% for error in form.Longitude.errors %}
+                        {{ error }}
+                    {% endfor %}
                 </div>
             </div>
             <div class="form-group row">
                 <label for="latitude">Central Latitude:</label>
                 <div class="col-sm-10">
                     <input id="latitude" type="text" name="Latitude" />
+                    {% for error in form.Latitude.errors %}
+                        {{ error }}
+                    {% endfor %}
                 </div>
             </div>
             <div class="form-group row">
                 <label for="radius">Radius (in meters):</label>
                 <div class="col-sm-10">
                     <input id="radius" type="text" name="Radius" />
+                    {% for error in form.Radius.errors %}
+                        {{ error }}
+                    {% endfor %}
                 </div>
             </div>
         </fieldset>
