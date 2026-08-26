@@ -11,6 +11,7 @@ Licensed under the BSD 3-Clause License
 
 import os
 from typing import Any
+from .validation import NewBothy, NewSite, SearchCircle
 
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
@@ -28,7 +29,8 @@ mongo = PyMongo(app)
 def search() -> str:
     """Returns the search form page with a dropdown of site names to search within."""
     sites = retrieve_site_names()
-    return render_template("search.html", sites=sites)
+    form = SearchCircle()
+    return render_template("search.html", sites=sites, form =form)
 
 
 @app.route("/results", methods=["POST", "GET"])
@@ -52,13 +54,17 @@ def results() -> str:
     radius = 0.0
     db = mongo.db
     if db is None:
-        raise RuntimeError("MongoDB has not been initialized")
+        raise RuntimeError("MongoDB has not been initialized") 
     if request.method == "POST":
         # User is searching by name
         if result["Name"]:
+            form = SearchCircle()
             data = db.bothies.find_one({"properties.name": result["Name"]}, {"_id": 0})
         # User is searching within a circle
         elif result["Longitude"] and result["Latitude"] and result["Radius"]:
+            form = SearchCircle(request.form) 
+            if not form.validate_on_submit():
+                return render_template("search.html", form=form)
             longitude = float(result["Longitude"])
             latitude = float(result["Latitude"])
             radius = float(result["Radius"])
@@ -78,6 +84,7 @@ def results() -> str:
             )
         # User is searching within a site
         elif result["Site"] != "site_unselected":
+            form = SearchCircle()
             # Find the site document by name
             site = db.sites.find_one({"properties.name": result["Site"]})
             # Use the geometry property of the site to specify
@@ -105,10 +112,11 @@ def results() -> str:
 @app.route("/bothyform", methods=["GET"])
 def bothyform() -> str:
     """Return a page with a map and form."""
-    return render_template("addbothy.html")
+    form = NewBothy()
+    return render_template("addbothy.html", form=form)
 
 
-@app.route("/addbothy", methods=["POST"])
+@app.route("/addbothy", methods=["GET","POST"])
 def addbothy() -> str:
     """Creates a new bothy document.
 
@@ -116,35 +124,39 @@ def addbothy() -> str:
     inserts the new record and returns the  map page with all bothies and sites.
     N.B. Form validation is non existent. Consider wtf forms.
     """
-    result = request.form
-    longitude = float(result["Longitude"])
-    latitude = float(result["Latitude"])
-    name = result["BothyName"]
-    new_bothy = {
-        "type": "Feature",
-        "geometry": {"type": "Point", "coordinates": [longitude, latitude]},
-        "properties": {"name": name},
-    }
-    db = mongo.db
+    form = NewBothy(request.form) #new_bothyform
+    if request.method=='POST' and form.validate_on_submit():  
+        longitude = float(request.form['Longitude'])
+        latitude = float(request.form["Latitude"])
+        name = request.form["BothyName"]
+        new_bothy = {
+            "type": "Feature",
+            "geometry": {"type": "Point", "coordinates": [longitude, latitude]},
+            "properties": {"name": name},
+        }
+        db = mongo.db
 
-    if db is None:
-        raise RuntimeError("MongoDB has not been initialized")
+        if db is None:
+            raise RuntimeError("MongoDB has not been initialized")
 
-    # Add the new bothy to the bothy collection
-    db.bothies.insert_one(new_bothy)
-    # Find all bothies, including the new one, excluding the id field
-    data = db.bothies.find({}, {"_id": 0})
-    # Find all sites
-    sites = retrieve_sites()
-    return render_template(
-        "bothies.html", data=data, sites=sites, longitude=0.0, latitude=0.0, radius=0.0
-    )
-
+        # Add the new bothy to the bothy collection
+        db.bothies.insert_one(new_bothy)
+        # Find all bothies, including the new one, excluding the id field
+        data = db.bothies.find({}, {"_id": 0})
+        # Find all sites
+        sites = retrieve_sites()
+        return render_template(
+            "bothies.html", data=data, sites=sites, longitude=0.0, latitude=0.0, radius=0.0)
+    else:
+        return render_template(
+                    "addbothy.html", form=form
+        )
 
 @app.route("/siteform", methods=["GET"])
 def siteform() -> str:
     """Return and add site map and form."""
-    return render_template("addsite.html")
+    form = NewSite()
+    return render_template("addsite.html", form=form)
 
 
 @app.route("/addsite", methods=["POST"])
@@ -156,10 +168,12 @@ def addsite() -> str:
     map page with all bothies and sites. N.B. Form validation is non existent.
     Consider wtf forms.
     """
-    result = request.form
-    longitude = result["Longitude"]
-    latitude = result["Latitude"]
-    name = result["SiteName"]
+    form = NewSite(request.form)
+    if not form.validate_on_submit():
+        return render_template("addsite.html", form=form)
+    longitude = request.form["Longitude"]
+    latitude = request.form["Latitude"]
+    name = request.form["SiteName"]
     polygon = [build_polygon(longitude, latitude)]
     site = {
         "type": "Feature",

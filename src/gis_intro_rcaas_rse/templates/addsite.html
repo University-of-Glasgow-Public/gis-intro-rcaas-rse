@@ -28,18 +28,27 @@
             <legend>Site Details (all fields required):</legend>
             <div class="form-group">
                 <label for="site">Site Name</label>
-                <input type="text" class="form-control" id="site" name="SiteName">
+                <input type="text" class="form-control" id="site" name="SiteName"  value="{{ request.form.get('SiteName', '') }}">
+                    {% for error in form.SiteName.errors %}
+                        {{ error }}
+                    {% endfor %}
             </div>
             <div class="form-group">
                 <label for="longitude">Longitude</label>
                 <input type="text" class="form-control" id="longitude" aria-describedby="longitudeHelp"
-                    name="Longitude">
+                    name="Longitude"  value="{{ request.form.get('Longitude', '') }}">
+                    {% for error in form.Longitude.errors %}
+                        {{ error }}
+                    {% endfor %}
                 <small id="longitudeHelp" class="form-text text-muted">If entering manually, ensure all values are
                     separated by commas. Finish by clicking the first vertex again.</small>
             </div>
             <div class="form-group">
                 <label for="latitude">Latitude</label>
-                <input type="text" class="form-control" id="latitude" aria-describedby="latitudeHelp" name="Latitude">
+                <input type="text" class="form-control" id="latitude" aria-describedby="latitudeHelp" name="Latitude"  value="{{ request.form.get('Latitude', '') }}">
+                    {% for error in form.Latitude.errors %}
+                        {{ error }}
+                    {% endfor %}
                 <small id="latitudeHelp" class="form-text text-muted">If entering manually, ensure all values are
                     separated by commas. Finish by clicking the first vertex again.</small>
             </div>
