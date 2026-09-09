@@ -20,9 +20,5 @@ abstract: >
   how to work with geospatial data.
 version: 1.0.0
 date-released: 2026-06-11
-references:
-  - type: article
-    title: "Example associated research paper"
-    doi: 10.xxxx/xxxx
 repository-code: https://github.com/University-of-Glasgow-Public/gis-intro-rcaas-rse
 url: https://university-of-glasgow-public.github.io/gis-intro-rcaas-rse/
