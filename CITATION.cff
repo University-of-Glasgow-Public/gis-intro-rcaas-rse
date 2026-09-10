@@ -1,5 +1,6 @@
 cff-version: 1.2.0
 title: gis-intro-rcaas-rse
+message: "If you use this software, please cite it using the metadata from this file."
 type: software
 license: BSD-3-Clause
 authors:
